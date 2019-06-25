@@ -1,0 +1,25 @@
+<% include partials/header %>
+<div id="register" class="container">
+    <div class="row">
+        <div class="col-md-6 mx-auto">
+                <div class="card card-body">
+                    <h3 class="text-center mb-4">Login</h3>
+                    <form action="/login" method="POST">
+                        <fieldset>
+                            <div class="form-group">
+                                <input class="form-control input-lg" placeholder="Username" name="username" type="text" required>
+                            </div>
+                            <div class="form-group">
+                                <input class="form-control input-lg" placeholder="Password" name="password" value="" type="password" required>
+                            </div>
+                            <input class="btn btn-lg btn-primary btn-block" value="Log Me In" type="submit">
+                            <a class="btn btn-primary btn-lg btn-block" href="/forgot" role="button">Forgot Password</a>
+                        </fieldset>
+                    </form>                   
+                    
+                </div>
+        </div>
+    </div>
+</div>
+
+<% include partials/footer %>

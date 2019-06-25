@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>Yelp Camp</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css"
+        integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="/stylesheets/landing.css">
+  </head>
+  <body>
+
+    <div id="landing-header">
+			<h1>Welcome to YelpCamp!</h1>
+      <a class="btn btn-primary btn-lg" href="/campgrounds" role="button">Get Started</a>
+      <div class="row justify-content-center mt-3">
+          <form action="/campgrounds" method="GET" class="form-inline">
+              <div class="form-group">
+                  <input type="text" name="search" placeholder="Campground search..." class="form-control">
+                  <input type="submit" value="Search" class="btn btn-secondary">
+              </div>
+          </form>              
+      </div>
+      <div class="row justify-content-center mt-3">
+        <%if(error && error.length > 0){%>
+                <div class="alert alert-danger" role="alert"><%= error%></div>
+        <%}%>     
+      </div>
+		</div>
+    
+		<ul class="slideshow">
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+		</ul>
+<% include partials/footer %>

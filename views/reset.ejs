@@ -1,0 +1,24 @@
+<% include partials/header %>
+<div id="register" class="container">
+    <div class="row">
+        <div class="col-md-6 mx-auto">
+                <div class="card card-body">
+                    <h3 class="text-center mb-4">Reset Password</h3>
+                    <form action="/reset/<%= token%>" method="POST">
+                        <fieldset>
+                            <div class="form-group">
+                                <input class="form-control input-lg" placeholder="New Password" name="password" type="password">
+                            </div>
+                            <div class="form-group">
+                                <input class="form-control input-lg" placeholder="Confirm Password" name="confirm" type="password">
+                            </div>
+                            <input class="btn btn-lg btn-primary btn-block" value="Reset Password" type="submit">
+                        </fieldset>
+                    </form>                   
+                    
+                </div>
+        </div>
+    </div>
+</div>
+
+<% include partials/footer %>

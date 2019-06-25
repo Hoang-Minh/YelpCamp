@@ -1,0 +1,47 @@
+<% include partials/header %>
+
+<div id="register" class="container">
+    <div class="row">
+        <div class="col-md-6 mx-auto">
+                <div class="card card-body">
+                    <h3 class="text-center mb-4">Sign-up</h3>
+                    <form action="/register" method="POST">
+                        <fieldset>
+                            <div class="form-group">
+                                <input class="form-control input-lg" placeholder="Username" name="username" type="text" required>
+                            </div>                            
+                            <div class="form-group">
+                                <input class="form-control input-lg" placeholder="Password" name="password" value="" type="password" required>
+                            </div>
+                            <div class="form-group">
+                                <input class="form-control input-lg" placeholder="First Name" name="firstName" value="" type="text">
+                            </div>
+                            <div class="form-group">
+                                <input class="form-control input-lg" placeholder="Last Name" name="lastName" value="" type="text">
+                            </div>
+                            <div class="form-group">
+                                <input class="form-control input-lg" placeholder="John@doe.com" name="email" value="" type="email">
+                            </div>
+                            <div class="form-group">
+                                <input class="form-control input-lg" placeholder="Avatar Url" name="avatar" value="" type="text">
+                            </div>
+                            <div class="form-group">
+                                <input class="form-control input-lg" placeholder="Admin Code" name="adminCode" type="password">
+                            </div>                           
+                            <div class="checkbox">
+                                <label class="small">
+                                    <input name="terms" type="checkbox">I have read and agree to the <a href="#">terms of service</a>
+                                </label>
+                            </div>
+                            <input class="btn btn-lg btn-primary btn-block" value="Sign Me Up" type="submit">
+                        </fieldset>
+                    </form>                   
+                    
+                </div>
+        </div>
+    </div>
+</div>
+
+
+
+<% include partials/footer %>
