@@ -13,9 +13,20 @@ var express = require("express"),
   userRoutes = require("./routes/users"),
   methodOverride = require("method-override"),
   flash = require("connect-flash"),
-  cookieParser = require("cookie-parser");
+  cookieParser = require("cookie-parser"),
+  session = require("express-session"),
+  MongoDBStore = require('connect-mongodb-session')(session);
 
 //seedDb();
+var store = new MongoDBStore({
+  uri: "mongodb://localhost/yelp_camp",
+  collection: "mySession"
+});
+
+store.on("error", function(err){
+  console.log(err);
+});
+
 mongoose.connect("mongodb://localhost/yelp_camp", {
   useNewUrlParser: true,
   useFindAndModify: false,
@@ -36,7 +47,11 @@ app.use(
   require("express-session")({
     secret: "I am Minh",
     resave: false,
-    saveUninitialized: false
+    saveUninitialized: false,
+    cookie: {
+      maxAge: 1000 * 60 * 60 * 24 * 7 // 1 week
+    },
+    store: store
   })
 );
 
