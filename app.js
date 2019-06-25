@@ -12,7 +12,8 @@ var express = require("express"),
   indexRoutes = require("./routes/index"),
   userRoutes = require("./routes/users"),
   methodOverride = require("method-override"),
-  flash = require("connect-flash");
+  flash = require("connect-flash"),
+  cookieParser = require("cookie-parser");
 
 //seedDb();
 mongoose.connect("mongodb://localhost/yelp_camp", {
@@ -20,11 +21,14 @@ mongoose.connect("mongodb://localhost/yelp_camp", {
   useFindAndModify: false,
   useCreateIndex: true
 });
+
 app.use(express.static(__dirname + "/public"));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 app.set("view engine", "ejs");
 app.use(flash());
+app.use(cookieParser('secret'));
+
 app.locals.moment = require("moment");
 
 //Passport configuration
