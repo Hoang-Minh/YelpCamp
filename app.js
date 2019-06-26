@@ -17,7 +17,7 @@ const express = require("express"),
   MongoStore = require('connect-mongo')(session);  
 
 //seedDb();
-mongoose.connect("mongodb+srv://admin:"  + process.env.MONGODB_ATLAS + "@cluster0-9fz7j.mongodb.net/test?retryWrites=true&w=majority", {
+mongoose.connect(process.env.DATABASE_URL, {
   useNewUrlParser: true,
   useFindAndModify: false,
   useCreateIndex: true
@@ -35,13 +35,17 @@ app.use(flash());
 
 app.locals.moment = require("moment");
 
+
 //Passport configuration
 app.use(
   session({
     secret: "I am Minh",
     resave: false,
     saveUninitialized: false,
-    store: new MongoStore({mongooseConnection: mongoose.connection})    
+    store: new MongoStore({
+      url: process.env.DATABASE_URL,
+      touchAfter: 24 * 3600 // time period in seconds
+    })    
   })
 );
 
