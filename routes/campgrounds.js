@@ -90,15 +90,16 @@ router.post("/", middleware.isLoggedIn, upload.single("image"), function(req, re
                 username: req.user.username
             }
 
-            req.body.lat = data[0].latitude;            
-            req.body.lng = data[0].longitude;            
-            req.body.location = data[0].formattedAddress;
+            req.body.campground.lat = data[0].latitude;            
+            req.body.campground.lng = data[0].longitude;            
+            req.body.campground.location = data[0].formattedAddress;
 
             Campground.create(req.body.campground, function(err, newlyCreated){
                 if(err){
                     req.flash("error", "A new campground cannot be created");
                     console.log(err);
                 } else {
+                    console.log("Newly Created Campground: " + newlyCreated);
                     req.flash("success", "A new campground has been created");
                     res.redirect("/campgrounds");
                 }
