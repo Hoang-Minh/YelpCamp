@@ -12,8 +12,9 @@ const express = require("express"),
   indexRoutes = require("./routes/index"),
   userRoutes = require("./routes/users"),
   methodOverride = require("method-override"),
-  flash = require("connect-flash");
-  
+  flash = require("connect-flash"),
+  session = require('express-session'),
+  MongoStore = require('connect-mongo')(session);  
 
 //seedDb();
 mongoose.connect("mongodb+srv://admin:"  + process.env.MONGODB_ATLAS + "@cluster0-9fz7j.mongodb.net/test?retryWrites=true&w=majority", {
@@ -36,10 +37,11 @@ app.locals.moment = require("moment");
 
 //Passport configuration
 app.use(
-  require("express-session")({
+  session({
     secret: "I am Minh",
     resave: false,
-    saveUninitialized: false    
+    saveUninitialized: false,
+    store: new MongoStore({mongooseConnection: mongoose.connection})    
   })
 );
 
