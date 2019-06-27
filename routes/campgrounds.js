@@ -214,7 +214,6 @@ function escapeRegex(text) {
 
 function deletePhotoOnCloud(photoUrl) {
 
-    var photoUrl = campground.image;
     var startIndex = photoUrl.lastIndexOf("/");
     var endIndex = photoUrl.lastIndexOf(".");
     var id = photoUrl.substr(startIndex + 1, endIndex - startIndex - 1);
