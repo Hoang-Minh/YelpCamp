@@ -17,7 +17,7 @@
         <% campgrounds.forEach(function(campground){%>            
                 <div class="col-sm-6 col-md-4 mb-5 px-2">
                     <div class="card text-center">            
-                        <img class="card-img-top px-1 py-1" src="<%= campground.image %>" alt="<#= campground.name %>">
+                        <img class="card-img-top px-1 py-1" src="<%= campground.image.url %>" alt="<#= campground.name %>">
                         <div class="card-body">
                             <p class="card-text font-weight-bold"><%= campground.name %> </p>
                             <a href="/campgrounds/<%=campground._id %>" class="btn btn-primary">More info</a>
