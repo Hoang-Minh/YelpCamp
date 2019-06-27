@@ -45,7 +45,7 @@
       color: #fff;
   }
 
-  #header, .alert, #register, #show-page, #new-campground, #profile{
+.alert, #main-section {
       margin-top: 5rem;
   }
 

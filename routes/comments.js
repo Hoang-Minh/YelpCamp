@@ -5,16 +5,33 @@ var Comment = require("../models/comment");
 var middleware = require("../middleware/index");
 
 // Comments New
-router.get("/new", middleware.isLoggedIn, function(req, res){
-    Campground.findById(req.params.id, function(err, foundCampground){
-        if(err || !foundCampground){
+router.get("/new", middleware.isLoggedIn, async (req, res) => {
+    try {
+        let campground = await Campground.findById(req.params.id);
+        
+        if(!campground){
             req.flash("error", "Campground not found");
-            console.log("Comment new rount " + err);
-        }else{
-            console.log("Found campground: " + foundCampground);
-            res.render("comments/new", {campground: foundCampground});
+            return res.redirect("back");
         }
-    });    
+
+        res.render("comments/new", {campground: campground});
+
+    } catch (error) {
+        console.log(error);
+        req.flash("error", "Something is wrong");
+        return res.redirect("back");
+    }
+
+
+    // Campground.findById(req.params.id, function(err, foundCampground){
+    //     if(err || !foundCampground){
+    //         req.flash("error", "Campground not found");
+    //         console.log("Comment new rount " + err);
+    //     }else{
+    //         console.log("Found campground: " + foundCampground);
+    //         res.render("comments/new", {campground: foundCampground});
+    //     }
+    // });    
 });
 
 //Comments Create
