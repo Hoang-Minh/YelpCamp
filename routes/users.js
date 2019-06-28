@@ -12,7 +12,7 @@ router.get("/:id", middleware.isLoggedIn, async (req, res) => {
             return res.redirect("back");
         }
 
-        res.render("users/show", {currentUser: foundUser});
+        res.render("users/show", {currentUser: user});
 
     } catch (error) {
         req.flash("error", "Something is wrong");
