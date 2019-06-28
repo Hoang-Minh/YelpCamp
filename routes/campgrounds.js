@@ -87,7 +87,12 @@ router.post("/", middleware.isLoggedIn, upload.single("image"), async (req, res)
 
         console.log(campground);
 
-        let result = await cloudinary.uploader.upload(req.file.path, {invalidate: true});
+        let uploadOptions = {
+            invalidate: true,
+            folder: process.env.CLOUDINARY_FOLDER                
+        };
+
+        let result = await cloudinary.uploader.upload(req.file.path, uploadOptions);
         
         campground.image = {
             url: result.secure_url,
@@ -223,6 +228,18 @@ async function deletePhotoOnCloud(photoId) {
     } catch (error) {
         console.log("Delete photo error: " + error);
     }    
+}
+
+function generateCloudinaryId(){
+    var anysize = 8;//the size of string 
+    var charset = "abcdefghijklmnopqrstuvwxyz"; //from where to create
+    result="";
+    for( var i=0; i < anysize; i++ ){
+        result += charset[Math.floor(Math.random() * charset.length)];
+    }
+    
+    console.log(result);
+    return result;
 }
 
 module.exports = router;

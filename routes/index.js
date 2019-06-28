@@ -1,25 +1,25 @@
-var express = require("express");
-var router = express.Router();
-var passport = require("passport");
-var User = require("../models/user");
-var async = require("async");
-var nodemailer = require("nodemailer");
-var crypto = require("crypto");
+const express = require("express");
+const router = express.Router();
+const passport = require("passport");
+const User = require("../models/user");
+const async = require("async");
+const nodemailer = require("nodemailer");
+const crypto = require("crypto");
 const { google } = require("googleapis");
 const OAuth2 = google.auth.OAuth2;
 
 // root route
-router.get("/", function(req, res) {
+router.get("/", (req, res) => {
   res.render("landing");
 });
 
 //show register form
-router.get("/register", function(req, res) {
+router.get("/register", (req, res) => {
   res.render("register");
 });
 
 //handle signup logic
-router.post("/register", function(req, res) {
+router.post("/register", (req, res) => {
   var newUser = new User({
     username: req.body.username,
     firstName: req.body.firstName,
@@ -29,14 +29,14 @@ router.post("/register", function(req, res) {
     isAdmin: req.body.adminCode === process.env.ADMIN_CODE
   });
 
-  User.register(newUser, req.body.password, function(err, user) {
+  User.register(newUser, req.body.password, (err, user) => {
     if (err || !user) {
       console.log(err);
       req.flash("error", err.message);
       return res.render("register");
     }
     // create an async array of function here ???
-    
+
     passport.authenticate("local")(req, res, function() {
       req.flash("success", "Welcome to Yelp Camp " + user.username);
       res.redirect("/campgrounds");
@@ -45,7 +45,7 @@ router.post("/register", function(req, res) {
 });
 
 //show login form
-router.get("/login", function(req, res) {
+router.get("/login", (req, res) => {
   res.render("login");
 });
 
@@ -61,113 +61,88 @@ router.post(
 );
 
 //logout route
-router.get("/logout", function(req, res) {
+router.get("/logout", (req, res) => {
   req.logOut();
   req.flash("success", "Logged you out");
   res.redirect("/campgrounds");
 });
 
-router.get("/forgot", function(req, res) {
+router.get("/forgot", (req, res) => {
   res.render("forgot");
 });
 
-router.post("/forgot", function(req, res) {
-  async.waterfall(
-    [
-      function(done) {
-        crypto.randomBytes(20, function(err, buf) {
-          var token = buf.toString("hex");
-          done(err, token);
-        });
-      },
+router.post("/forgot", async (req, res) => {
+  try {
+    let buff = await (async () => crypto.randomBytes(20))();
+    let token = await (async () => buff.toString("hex"))();
+    let user = await User.findOne({ email: req.body.email });
 
-      function(token, done) {
-        User.findOne({ email: req.body.email }, function(err, user) {
-          if (!user) {
-            req.flash("error", "No account associated with that email !!!");
-            return res.redirect("/forgot");
-          }
-
-          user.resetPasswordToken = token;
-          user.resetPasswordExpires = Date.now() + 3600000; // 1hr
-
-          user.save(function(err) {
-            done(err, token, user);
-          });
-        });
-      },
-
-      function(token, user, done) {        
-
-        const oauth2Client = new OAuth2(
-          process.env.CLIENT_ID,
-          process.env.CLIENT_SECRET,
-          "https://developers.google.com/oauthplayground" // Redirect URL
-        );
-        
-        oauth2Client.setCredentials({
-          refresh_token: process.env.REFRESH_TOKEN
-        });
-
-        var auth = {
-          type: "oauth2",
-          user: process.env.GMAIL,
-          clientId: process.env.CLIENT_ID,
-          clientSecret: process.env.CLIENT_SECRET,
-          refreshToken: process.env.REFRESH_TOKEN,
-          accessToken: async function(){
-            const tokens = await oauth2Client.refreshAccessToken();
-            return tokens.credentials.access_token;
-          }
-        };
-
-        var transporter = nodemailer.createTransport({
-          service: "Gmail",
-          auth: auth
-        });
-
-        var mailOptions = {
-          to: user.email,
-          from: process.env.GMAIL,
-          subject: "YelpCamp Password Reset",
-          text:
-            "You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n" +
-            "Please click on the following link, or paste this into your browser to complete the process:\n\n" +
-            "http://" +
-            req.headers.host +
-            "/reset/" +
-            token +
-            "\n\n" +
-            "If you did not request this, please ignore this email and your password will remain unchanged.\n"
-        };
-
-        transporter.sendMail(mailOptions, function(err) {
-          if (err) {
-            console.log(err);
-            req.flash(
-              "error",
-              "Error. An email cannot be sent to " + user.email
-            );
-            res.redirect("back");
-          }
-          req.flash(
-            "success",
-            "An e-mail has been sent to " +
-              user.email +
-              " with further instructions."
-          );
-          done(err, "done");
-        });
-      }
-    ],
-    function(err) {
-      if (err) return next(err);
-      res.redirect("/forgot");
+    if (!user) {
+      req.flash("error", "No account associated with that email !!!");
+      return res.redirect("/forgot");
     }
-  );
+
+    user.resetPasswordToken = token;
+    user.resetPasswordExpires = Date.now() + 3600000; // 1hr
+    user.save();
+
+    const oauth2Client = new OAuth2(
+      process.env.CLIENT_ID,
+      process.env.CLIENT_SECRET,
+      "https://developers.google.com/oauthplayground" // Redirect URL
+    );
+
+    oauth2Client.setCredentials({
+      refresh_token: process.env.REFRESH_TOKEN
+    });
+
+    let accessToken = await (async () => {
+      let tokens = oauth2Client.refreshAccessToken();
+      return tokens.credentials.access_token;
+    });
+
+    var auth = {
+      type: "oauth2",
+      user: process.env.GMAIL,
+      clientId: process.env.CLIENT_ID,
+      clientSecret: process.env.CLIENT_SECRET,
+      refreshToken: process.env.REFRESH_TOKEN,
+      accessToken: accessToken
+    };
+
+    var transporter = nodemailer.createTransport({
+      service: "Gmail",
+      auth: auth
+    });
+
+    var mailOptions = {
+      to: user.email,
+      from: process.env.GMAIL,
+      subject: "YelpCamp Password Reset",
+      text:
+        "You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n" +
+        "Please click on the following link, or paste this into your browser to complete the process:\n\n" +
+        "http://" +
+        req.headers.host +
+        "/reset/" +
+        token +
+        "\n\n" +
+        "If you did not request this, please ignore this email and your password will remain unchanged.\n"
+    };
+
+    await transporter.sendMail(mailOptions);
+    req.flash(
+      "success",
+      "An e-mail has been sent to " + user.email + " with further instructions."
+    );
+    res.redirect("/login");    
+  } catch (error) {
+    console.log(error);
+    res.redirect("/forgot");
+  }
 });
 
-router.get("/reset/:token", function(req, res) {
+router.get("/reset/:token", (req, res) => {
   User.findOne(
     {
       resetPasswordToken: req.params.token,
@@ -183,7 +158,7 @@ router.get("/reset/:token", function(req, res) {
   );
 });
 
-router.post("/reset/:token", function(req, res) {
+router.post("/reset/:token", (req, res) => {
   async.waterfall(
     [
       function(done) {
@@ -226,7 +201,7 @@ router.post("/reset/:token", function(req, res) {
           process.env.CLIENT_SECRET,
           "https://developers.google.com/oauthplayground" // Redirect URL
         );
-        
+
         oauth2Client.setCredentials({
           refresh_token: process.env.REFRESH_TOKEN
         });
@@ -237,7 +212,7 @@ router.post("/reset/:token", function(req, res) {
           clientId: process.env.CLIENT_ID,
           clientSecret: process.env.CLIENT_SECRET,
           refreshToken: process.env.REFRESH_TOKEN,
-          accessToken: async function(){
+          accessToken: async function() {
             const tokens = await oauth2Client.refreshAccessToken();
             return tokens.credentials.access_token;
           }

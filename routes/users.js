@@ -4,17 +4,20 @@ var User = require("../models/user");
 var middleware = require("../middleware/index");
 
 // show user profile
-router.get("/:id", middleware.isLoggedIn, function(req, res){
-    User.findById(req.params.id, function(err, foundUser){
-        if(err || !foundUser){
-            console.log(err);
+router.get("/:id", middleware.isLoggedIn, async (req, res) => {
+    try {
+        let user = await User.findById(req.params.id);
+        if(!user){
             req.flash("error", "User not found");
-            res.redirect("back");
-        } else {            
-            console.log(foundUser);
-            res.render("users/show", {currentUser: foundUser});            
+            return res.redirect("back");
         }
-    });
+
+        res.render("users/show", {currentUser: foundUser});
+
+    } catch (error) {
+        req.flash("error", "Something is wrong");
+        return res.redirect("back");
+    }    
 });
 
 module.exports = router;
