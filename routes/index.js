@@ -172,7 +172,9 @@ router.post("/reset/:token", async (req, res) => {
       return res.redirect("back");
     }
   
-    if (req.body.password === req.body.confirm){
+    if (req.body.password === req.body.confirm){      
+      user.resetPasswordToken = undefined;
+      user.resetPasswordExpires = undefined;
       await user.setPassword(req.body.password);
       await user.save();      
     } else {
