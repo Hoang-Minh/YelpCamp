@@ -2,7 +2,6 @@ const express = require("express");
 const router = express.Router();
 const passport = require("passport");
 const User = require("../models/user");
-const async = require("async");
 const nodemailer = require("nodemailer");
 const crypto = require("crypto");
 const { google } = require("googleapis");
@@ -142,116 +141,93 @@ router.post("/forgot", async (req, res) => {
   }
 });
 
-router.get("/reset/:token", (req, res) => {
-  User.findOne(
+router.get("/reset/:token", async (req, res) => {
+  let user = await User.findOne(
     {
       resetPasswordToken: req.params.token,
       resetPasswordExpires: { $gt: Date.now() }
-    },
-    function(err, user) {
-      if (!user) {
-        req.flash("error", "Password reset token is invalid or has expired.");
-        return res.redirect("/forgot");
-      }
-      res.render("reset", { token: req.params.token });
     }
   );
+
+  if(!user){
+    req.flash("error", "Password reset token is invalid or has expired.");
+    return res.redirect("/forgot");
+  }
+
+  res.render("reset", { token: req.params.token });
+  
 });
 
-router.post("/reset/:token", (req, res) => {
-  async.waterfall(
-    [
-      function(done) {
-        User.findOne(
-          {
-            resetPasswordToken: req.params.token,
-            resetPasswordExpires: { $gt: Date.now() }
-          },
-          function(err, user) {
-            if (!user) {
-              req.flash(
-                "error",
-                "Password reset token is invalid or has expired."
-              );
-              return res.redirect("back");
-            }
-
-            if (req.body.password === req.body.confirm) {
-              user.setPassword(req.body.password, function(err) {
-                user.resetPasswordToken = undefined;
-                user.resetPasswordExpires = undefined;
-
-                user.save(function(err) {
-                  req.logIn(user, function(err) {
-                    done(err, user);
-                  });
-                });
-              });
-            } else {
-              req.flash("error", "Passwords do not match.");
-              return res.redirect("back");
-            }
-          }
-        );
-      },
-
-      function(user, done) {
-        const oauth2Client = new OAuth2(
-          process.env.CLIENT_ID,
-          process.env.CLIENT_SECRET,
-          "https://developers.google.com/oauthplayground" // Redirect URL
-        );
-
-        oauth2Client.setCredentials({
-          refresh_token: process.env.REFRESH_TOKEN
-        });
-
-        var auth = {
-          type: "oauth2",
-          user: process.env.GMAIL,
-          clientId: process.env.CLIENT_ID,
-          clientSecret: process.env.CLIENT_SECRET,
-          refreshToken: process.env.REFRESH_TOKEN,
-          accessToken: async function() {
-            const tokens = await oauth2Client.refreshAccessToken();
-            return tokens.credentials.access_token;
-          }
-        };
-
-        var mailOptions = {
-          to: user.email,
-          from: process.env.GMAIL,
-          subject: "Your password has been changed",
-          text:
-            "Hello,\n\n" +
-            "This is a confirmation that the password for your account " +
-            user.email +
-            " has just been changed.\n"
-        };
-
-        transporter.sendMail(mailOptions, function(err) {
-          if (err) {
-            console.log(err);
-            req.flash(
-              "error",
-              "Error. An email cannot be sent to " + user.email
-            );
-            res.redirect("back");
-          }
-          req.flash("success", "Success! Your password has been changed.");
-          done(err);
-        });
+router.post("/reset/:token", async (req, res) => {
+  try {
+    let user = await User.findOne(
+      {
+        resetPasswordToken: req.params.token,
+        resetPasswordExpires: { $gt: Date.now() }
       }
-    ],
-    function(err) {
-      if (err) {
-        console.log(err);
-        req.flash("error", "Unknown error");
-        res.redirect("back");
-      }
-      res.redirect("/campgrounds");
+    );
+  
+    if(!user){
+      req.flash("error", "Password reset token is invalid or has expired.");
+      return res.redirect("back");
     }
-  );
+  
+    if (req.body.password === req.body.confirm){
+      await user.setPassword(req.body.password);
+      await user.save();      
+    } else {
+      req.flash("error", "Passwords do not match.");
+      return res.redirect("back");
+    }
+  
+    const oauth2Client = new OAuth2(
+      process.env.CLIENT_ID,
+      process.env.CLIENT_SECRET,
+      "https://developers.google.com/oauthplayground" // Redirect URL
+    );
+  
+    oauth2Client.setCredentials({
+      refresh_token: process.env.REFRESH_TOKEN
+    });
+  
+    let accessToken = await (async () => {
+      let tokens = oauth2Client.refreshAccessToken();
+      return tokens.credentials.access_token;
+    });
+    
+    var auth = {
+      type: "oauth2",
+      user: process.env.GMAIL,
+      clientId: process.env.CLIENT_ID,
+      clientSecret: process.env.CLIENT_SECRET,
+      refreshToken: process.env.REFRESH_TOKEN,
+      accessToken: accessToken 
+    };
+
+    var transporter = nodemailer.createTransport({
+      service: "Gmail",
+      auth: auth
+    });
+  
+    var mailOptions = {
+      to: user.email,
+      from: process.env.GMAIL,
+      subject: "Your password has been changed",
+      text:
+        "Hello,\n\n" +
+        "This is a confirmation that the password for your account " +
+        user.email +
+        " has just been changed.\n"
+    };
+  
+    await transporter.sendMail(mailOptions);
+    req.flash("success", "Success! Your password has been changed.");
+    res.redirect("/login");
+  } catch (error) {
+    console.log(error);
+    req.flash("error", "Something is wrong...");
+    return res.redirect("back");
+  }  
 });
 
 module.exports = router;

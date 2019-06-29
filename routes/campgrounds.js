@@ -230,16 +230,4 @@ async function deletePhotoOnCloud(photoId) {
     }    
 }
 
-function generateCloudinaryId(){
-    var anysize = 8;//the size of string 
-    var charset = "abcdefghijklmnopqrstuvwxyz"; //from where to create
-    result="";
-    for( var i=0; i < anysize; i++ ){
-        result += charset[Math.floor(Math.random() * charset.length)];
-    }
-    
-    console.log(result);
-    return result;
-}
-
 module.exports = router;
