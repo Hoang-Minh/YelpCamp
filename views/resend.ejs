@@ -1,0 +1,15 @@
+<% include partials/header %>
+
+<div id="main-section" class="container">
+    <form action="/resend" Method="POST">
+        <fieldset>
+            <div class="form-group">
+                <input class="form-control input-lg" placeholder="Email" name="email" type="email">
+            </div>
+            <input type="submit" class="btn btn-primary" value="Resend Email Verification">
+        </fieldset>        
+    </form>    
+</div>
+
+<% include partials/footer %>
+

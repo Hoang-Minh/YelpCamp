@@ -1,0 +1,11 @@
+<% include partials/header %>
+
+<div id="main-section" class="container">
+    <form action="/verify" Method="POST">
+        <input type="hidden" name="token" value="<%= token%>">
+        <input type="submit" class="btn btn-primary" value="Continue">
+    </form>    
+</div>
+
+<% include partials/footer %>
+

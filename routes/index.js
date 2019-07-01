@@ -2,10 +2,9 @@ const express = require("express");
 const router = express.Router();
 const passport = require("passport");
 const User = require("../models/user");
-const nodemailer = require("nodemailer");
 const crypto = require("crypto");
-const { google } = require("googleapis");
-const OAuth2 = google.auth.OAuth2;
+const mailhelper = require("../public/js/mailhelper");
+const randomstring = require("randomstring");
 
 // root route
 router.get("/", (req, res) => {
@@ -17,30 +16,152 @@ router.get("/register", (req, res) => {
   res.render("register");
 });
 
-//handle signup logic
-router.post("/register", (req, res) => {
-  var newUser = new User({
-    username: req.body.username,
-    firstName: req.body.firstName,
-    lastName: req.body.lastName,
-    email: req.body.email,
-    avatar: req.body.avatar,
-    isAdmin: req.body.adminCode === process.env.ADMIN_CODE
-  });
+//hanlde signup logic
+router.post("/register", async (req, res) => {
+  var newUser = req.body.user;
 
-  User.register(newUser, req.body.password, (err, user) => {
-    if (err || !user) {
-      console.log(err);
-      req.flash("error", err.message);
-      return res.render("register");
+  try {
+    const foundUser = await User.findOne({email: newUser.email});
+
+    if(foundUser){
+      req.flash('error', 'Email is already in use.');
+      return res.redirect('back');
     }
-    // create an async array of function here ???
 
-    passport.authenticate("local")(req, res, function() {
-      req.flash("success", "Welcome to Yelp Camp " + user.username);
-      res.redirect("/campgrounds");
-    });
-  });
+    // Hash the password
+    const hash = await User.hashPassword(newUser.password);
+
+    // Generate secret token
+    const secretToken = randomstring.generate();
+    console.log("Secret Token: " + secretToken);
+
+    // Save secret token to the DB
+    newUser.registerToken = secretToken;
+    newUser.registerTokenExpires = Date.now() + 3600000; // 1hr    
+
+    // need to hash password
+    newUser.password = hash;       
+
+    const content =
+      "Thank you for becoming a Yelp Camp user.\n\n" +
+      "Please click on the following link, or paste this into your browser to complete the registration process:\n\n" +
+      "http://" +
+      req.headers.host +
+      "/register/" +
+      secretToken +
+      "\n\n" +
+      "If you did not register, please ignore this email.\n"
+
+    const mailOptions = {
+      to: newUser.email,
+      from: process.env.GMAIL,
+      subject: "Yelp Camp Registration",
+      text: content
+    }
+
+    await mailhelper.sendMail(mailOptions);
+
+    // save to database    
+    const user = await new User(newUser); 
+    await user.save();
+    req.flash(
+      "success",
+      "An e-mail has been sent to " + user.email + " with further instructions."
+    );
+    res.redirect("/login");
+
+
+  } catch (error) {
+    console.log(error);
+    req.flash("error", "Something is wrong....");
+    return res.redirect("back");
+  }
+
+});
+
+router.get("/register/:token", async (req, res) => {  
+  res.render("verify", {token: req.params.token} );  
+});
+
+router.post("/verify", async (req, res) => {  
+  try {
+    let user = await User.findOne(
+      {
+        registerToken: req.body.token,
+        registerTokenExpires: {$gt: Date.now()}
+      });
+
+      if(!user){        
+        req.flash("error", "Register token is invalid or has expired.");
+        return res.redirect("/resend");
+      }
+
+      user.isVerified = true;
+      user.registerToken = undefined;
+      user.registerTokenExpires = undefined;      
+      await user.save();
+      
+      req.flash("success", "Thank you for completing registration process");
+      return res.redirect("/login");
+  } catch (error) {
+    console.log(error);
+    req.flash("error", "Something is wrong....");
+    return res.redirect("/login");
+  }
+});
+
+router.get("/resend", async (req, res) => {
+  res.render("resend");
+})
+
+router.post("/resend", async(req, res) => {
+  try {
+    const user = await User.findOne({email: req.body.email});
+
+    if(!user){
+      req.flash("error", "No account associated with the provied email");
+      return res.redirect("back");
+    }
+
+    // Generate secret token
+    const secretToken = randomstring.generate();
+    console.log("Secret Token: " + secretToken);
+
+    // Save secret token to the DB
+    user.registerToken = secretToken;
+    user.registerTokenExpires = Date.now() + 3600000; // 1hr    
+
+    const content =
+      "Thank you for becoming a Yelp Camp user.\n\n" +
+      "Please click on the following link, or paste this into your browser to re-complete the registration process:\n\n" +
+      "http://" +
+      req.headers.host +
+      "/register/" +
+      secretToken +
+      "\n\n" +
+      "If you did not register, please ignore this email.\n"
+
+    const mailOptions = {
+      to: user.email,
+      from: process.env.GMAIL,
+      subject: "Yelp Camp Registration",
+      text: content
+    }
+
+    await mailhelper.sendMail(mailOptions);
+
+    // save to database    
+    await user.save();
+    req.flash(
+      "success",
+      "An e-mail has been sent to " + user.email + " with further instructions."
+    );
+    return res.redirect("/login");
+  } catch (error) {
+    console.log(error);
+    req.flash("error", "Something is wrong");
+    return res.redirect("back");
+  }
 });
 
 //show login form
@@ -85,35 +206,6 @@ router.post("/forgot", async (req, res) => {
     user.resetPasswordExpires = Date.now() + 3600000; // 1hr
     user.save();
 
-    const oauth2Client = new OAuth2(
-      process.env.CLIENT_ID,
-      process.env.CLIENT_SECRET,
-      "https://developers.google.com/oauthplayground" // Redirect URL
-    );
-
-    oauth2Client.setCredentials({
-      refresh_token: process.env.REFRESH_TOKEN
-    });
-
-    let accessToken = await (async () => {
-      let tokens = oauth2Client.refreshAccessToken();
-      return tokens.credentials.access_token;
-    });
-
-    var auth = {
-      type: "oauth2",
-      user: process.env.GMAIL,
-      clientId: process.env.CLIENT_ID,
-      clientSecret: process.env.CLIENT_SECRET,
-      refreshToken: process.env.REFRESH_TOKEN,
-      accessToken: accessToken
-    };
-
-    var transporter = nodemailer.createTransport({
-      service: "Gmail",
-      auth: auth
-    });
-
     var mailOptions = {
       to: user.email,
       from: process.env.GMAIL,
@@ -129,7 +221,7 @@ router.post("/forgot", async (req, res) => {
         "If you did not request this, please ignore this email and your password will remain unchanged.\n"
     };
 
-    await transporter.sendMail(mailOptions);
+    await mailhelper.sendMail(mailOptions);
     req.flash(
       "success",
       "An e-mail has been sent to " + user.email + " with further instructions."
@@ -180,36 +272,7 @@ router.post("/reset/:token", async (req, res) => {
     } else {
       req.flash("error", "Passwords do not match.");
       return res.redirect("back");
-    }
-  
-    const oauth2Client = new OAuth2(
-      process.env.CLIENT_ID,
-      process.env.CLIENT_SECRET,
-      "https://developers.google.com/oauthplayground" // Redirect URL
-    );
-  
-    oauth2Client.setCredentials({
-      refresh_token: process.env.REFRESH_TOKEN
-    });
-  
-    let accessToken = await (async () => {
-      let tokens = oauth2Client.refreshAccessToken();
-      return tokens.credentials.access_token;
-    });
-    
-    var auth = {
-      type: "oauth2",
-      user: process.env.GMAIL,
-      clientId: process.env.CLIENT_ID,
-      clientSecret: process.env.CLIENT_SECRET,
-      refreshToken: process.env.REFRESH_TOKEN,
-      accessToken: accessToken 
-    };
-
-    var transporter = nodemailer.createTransport({
-      service: "Gmail",
-      auth: auth
-    });
+    }   
   
     var mailOptions = {
       to: user.email,
@@ -222,7 +285,7 @@ router.post("/reset/:token", async (req, res) => {
         " has just been changed.\n"
     };
   
-    await transporter.sendMail(mailOptions);
+    await mailhelper.sendMail(mailOptions);
     req.flash("success", "Success! Your password has been changed.");
     res.redirect("/login");
   } catch (error) {
