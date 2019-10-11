@@ -58,35 +58,4 @@ middlewareObj.isLoggedIn = function(req, res, next) {
   res.redirect("/login");
 };
 
-middlewareObj.isVerified = function(req, res, next) {
-  if (!req.user.isVerified) {
-    req.flash(
-      "error",
-      "Your account has not been activated yet.\n\n Please complete verification email."
-    );
-    return res.redirect("/login");
-  }
-
-  return next();
-};
-
-// Authorization
-middlewareObj.isAuthenticated = (req, res, next) => {
-  if (req.isAuthenticated()) {
-    return next();
-  } else {
-    req.flash("error", "Sorry, but you must be registered first!");
-    res.redirect("back");
-  }
-};
-
-middlewareObj.isNotAuthenticated = (req, res, next) => {
-  if (req.isAuthenticated()) {
-    req.flash("error", "Sorry, but you are already logged in!");
-    res.redirect("back");
-  } else {
-    return next();
-  }
-};
-
 module.exports = middlewareObj;
