@@ -95,7 +95,7 @@ app.use((req, res, next) => {
 });
 
 app.use(indexRoutes);
-app.use("/campgrounds/:id/comments", commentRoutes);
+app.use("/campgrounds/:slug/comments", commentRoutes);
 app.use("/campgrounds", campgroundRoutes);
 app.use("/users", userRoutes);
 
