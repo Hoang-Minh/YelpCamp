@@ -5,7 +5,7 @@
 
     <div class="row justify-content-center">
         <div class="col-md-6">
-            <form action="/campgrounds/<%= campground._id %>/comments" method="POST">
+            <form action="/campgrounds/<%= campground.slug %>/comments" method="POST">
                 <div class="form-group">
                     <input class="form-control" type="text" name="comment[text]" placeholder="text">
                 </div>

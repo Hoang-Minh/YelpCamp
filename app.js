@@ -97,7 +97,7 @@ app.use((req, res, next) => {
 
 app.use(indexRoutes);
 app.use("/campgrounds", campgroundRoutes);
-app.use("/campgrounds/:id/comments", commentRoutes);
+app.use("/campgrounds/:slug/comments", commentRoutes);
 app.use("/users", userRoutes);
 
 var port = process.env.PORT || 3000;

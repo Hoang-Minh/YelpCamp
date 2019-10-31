@@ -119,9 +119,10 @@ router.get("/new", middleware.isLoggedIn, function(req, res){
 });
 
 //SHOW - show more info about one campground - done async
-router.get("/:id", async function(req, res){
+router.get("/:slug", async function(req, res){
     try {
-        let foundCampground = await Campground.findById(req.params.id).populate("comments");
+        // let foundCampground = await Campground.findById(req.params.id).populate("comments");
+        let foundCampground = await Campground.findOne({slug: req.params.slug}).populate("comments");
         res.render("campgrounds/show", {campground: foundCampground});
     } catch (error) {
         console.log(error);
@@ -130,10 +131,10 @@ router.get("/:id", async function(req, res){
 });
 
 //Edit Campground route - done async
-router.get("/:id/edit", middleware.checkCampgroundOwnership, async (req, res) => {
+router.get("/:slug/edit", middleware.checkCampgroundOwnership, async (req, res) => {
     try {
-        let foundCampground = await Campground.findById(req.params.id);
-        
+        // let foundCampground = await Campground.findById(req.params.id);
+        let foundCampground = await Campground.findOne({slug: req.params.slug});
         if(!foundCampground){
             req.flash("error", "Campground not found");
             return res.redirect("back");
@@ -150,15 +151,16 @@ router.get("/:id/edit", middleware.checkCampgroundOwnership, async (req, res) =>
 
 
 //Update Campground route - data is not updated: url and publicId
-router.put("/:id", middleware.checkCampgroundOwnership, upload.single("image"), async (req, res) => {
+router.put("/:slug", middleware.checkCampgroundOwnership, upload.single("image"), async (req, res) => {
 
     try {
         var data = await geocoder.geocode(req.body.campground.location);
         var lat = data[0].latitude;
         var lng = data[0].longitude;
         var location = data[0].formattedAddress;
-        var foundCampground = await Campground.findById(req.params.id);
-    
+        // var foundCampground = await Campground.findById(req.params.id);
+        var foundCampground = await Campground.findOne({slug: req.params.slug});
+
         console.log(foundCampground);
     
         var newData = {
@@ -189,7 +191,7 @@ router.put("/:id", middleware.checkCampgroundOwnership, upload.single("image"), 
         await Campground.updateOne({}, newData);
     
         req.flash("success", "Campground has been updated");
-        res.redirect("/campgrounds/" + req.params.id);
+        res.redirect("/campgrounds/" + req.params.slug);
         
     } catch (error) {
         console.log(error);
@@ -198,10 +200,10 @@ router.put("/:id", middleware.checkCampgroundOwnership, upload.single("image"), 
 });
 
 //Delete campground
-router.delete("/:id", middleware.checkCampgroundOwnership, async (req, res) => {
+router.delete("/:slug", middleware.checkCampgroundOwnership, async (req, res) => {
     try {
-        let campground = await Campground.findById(req.params.id);
-
+        // let campground = await Campground.findById(req.params.id);
+        let campground = await Campground.findOne({slug: req.params.slug});
         if(!campground){
             req.flash("error", "Cannot find campground");            
             return res.redirect("back");

@@ -7,8 +7,9 @@ var middleware = require("../middleware/index");
 // Comments New - done async
 router.get("/new", middleware.isLoggedIn, async (req, res) => {
     try {
-        let campground = await Campground.findById(req.params.id);
-        
+        // let campground = await Campground.findById(req.params.id);
+        let campground = await Campground.findOne({slug: req.params.slug});
+
         if(!campground){
             req.flash("error", "Campground not found");
             return res.redirect("back");
@@ -26,7 +27,9 @@ router.get("/new", middleware.isLoggedIn, async (req, res) => {
 //Comments Create - done async
 router.post("/", middleware.isLoggedIn, async (req, res) => {
     try {
-        let campground = await Campground.findById(req.params.id);
+        // let campground = await Campground.findById(req.params.id);
+        let campground = await Campground.findOne({slug: req.params.slug});
+
         if(!campground){
             req.flash("error", "Campground not found");
             return res.redirect("back");
@@ -44,7 +47,8 @@ router.post("/", middleware.isLoggedIn, async (req, res) => {
         await Campground.create(campground);
         //console.log(comment);
         req.flash("success", "Comment is created");
-        res.redirect("/campgrounds/" + campground._id);
+        // res.redirect("/campgrounds/" + campground._id);
+        res.redirect("/campgrounds/" + campground.slug);
 
     } catch (error) {
         console.log(error);
@@ -62,7 +66,8 @@ router.get("/:comment_id/edit", middleware.checkCommentOwnership, async (req, re
             return res.redirect("back");
         }
 
-        res.render("comments/edit", {campground_id: req.params.id, comment: comment});
+        // res.render("comments/edit", {campground_id: req.params.id, comment: comment});
+        res.render("comments/edit", {campground_slug: req.params.slug, comment: comment});
 
     } catch (error) {
         console.log(error);
@@ -85,7 +90,8 @@ router.put("/:comment_id", middleware.checkCommentOwnership, async (req, res) =>
         await Comment.updateOne({}, comment);
 
         req.flash("success", "Comment has been updated");
-        res.redirect("/campgrounds/" + req.params.id);
+        // res.redirect("/campgrounds/" + req.params.id);
+        res.redirect("/campgrounds/" + req.params.slug);
     } catch (error) {
         console.log(error);
         req.flash("error", "Something is wrong....");
@@ -105,7 +111,8 @@ router.delete("/:comment_id", middleware.checkCommentOwnership, async (req, res)
         }
         comment.remove();
 
-        let campground = await Campground.findById(req.params.id);
+        // let campground = await Campground.findById(req.params.id);
+        let campground = await Campground.findOne({slug: req.params.slug});
 
         if(!campground){
             req.flash("error", "Campground not found");
@@ -119,7 +126,8 @@ router.delete("/:comment_id", middleware.checkCommentOwnership, async (req, res)
         );                     
 
         req.flash("success", "Comment has been deleted");
-        res.redirect("/campgrounds/" + req.params.id);
+        // res.redirect("/campgrounds/" + req.params.id);
+        res.redirect("/campgrounds/" + req.params.slug);
 
     } catch (error) {
         console.log(error);

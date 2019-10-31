@@ -5,7 +5,7 @@
 
     <div class="row justify-content-center">
         <div class="col-md-6">
-            <form action="/campgrounds/<%= campground_id %>/comments/<%= comment._id%>?_method=PUT" method="POST">
+            <form action="/campgrounds/<%= campground_slug %>/comments/<%= comment._id%>?_method=PUT" method="POST">
                 <div class="form-group">
                     <input class="form-control" type="text" name="comment[text]" value="<%= comment.text%>">
                 </div>
