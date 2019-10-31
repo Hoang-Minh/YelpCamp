@@ -20,7 +20,8 @@ const express = require("express"),
 mongoose.connect(process.env.DATABASE_URL, {
   useNewUrlParser: true,
   useFindAndModify: false,
-  useCreateIndex: true
+  useCreateIndex: true,
+  useUnifiedTopology: true
 }).then(() => {
   console.log("Connected to DB");
 }).catch(err => {
@@ -88,15 +89,15 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 app.use((req, res, next) => {
-  res.locals.currentUser = req.user;
+  res.locals.currentUserTest = req.user;
   res.locals.error = req.flash("error");
   res.locals.success = req.flash("success");
   next();
 });
 
 app.use(indexRoutes);
-app.use("/campgrounds/:slug/comments", commentRoutes);
 app.use("/campgrounds", campgroundRoutes);
+app.use("/campgrounds/:id/comments", commentRoutes);
 app.use("/users", userRoutes);
 
 var port = process.env.PORT || 3000;
