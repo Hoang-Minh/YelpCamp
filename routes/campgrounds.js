@@ -122,7 +122,7 @@ router.get("/new", middleware.isLoggedIn, function(req, res){
 router.get("/:slug", async function(req, res){
     try {
         // let foundCampground = await Campground.findById(req.params.id).populate("comments");
-        let foundCampground = await Campground.findOne({slug: req.params.slug}).populate("comments");
+        let foundCampground = await Campground.findOne({slug: req.params.slug}).populate("comments likes");
         res.render("campgrounds/show", {campground: foundCampground});
     } catch (error) {
         console.log(error);
@@ -218,6 +218,36 @@ router.delete("/:slug", middleware.checkCampgroundOwnership, async (req, res) =>
         req.flash("error", "Cannot find campground");            
         res.redirect("/campgrounds");
     }    
+});
+
+router.post("/:slug/like", middleware.isLoggedIn, async(req, res) => {
+    try {
+        let campground = await Campground.findOne({slug: req.params.slug});
+
+        if(!campground){
+            req.flash("error", "Cannot find campground");
+            return  res.redirect("back");
+        }
+
+        // check if req.user._id exists in foundCampground.likes
+        let foundUserLike = campground.likes.some(like => like.equals(req.user._id));
+
+        if(foundUserLike){
+            // user already liked, removing like
+            campground.likes.pull(req.user._id);
+        } else {
+            // adding new user like
+            campground.likes.push(req.user);
+        }   
+
+        await campground.save();
+        return res.redirect("/campgrounds/" + campground.slug);
+
+    } catch (error) {
+        console.log(error);
+        req.flash("error", "Something is wrong....");
+        return  res.redirect("back");
+    }
 });
 
 function escapeRegex(text) {

@@ -49,8 +49,12 @@
       margin-top: 5rem;
   }
 
-  /* google map*/  
-  #map{
-      height: 400px;
-      width: 100%;
-  }
+/* google map*/  
+#map{
+    height: 400px;
+    width: 100%;
+}
+
+#campground-name {
+    margin-bottom: 0;
+}

@@ -19,8 +19,11 @@
                     <div class="card text-center">            
                         <img class="card-img-top px-1 py-1" src="<%= campground.image.url %>" alt="<#= campground.name %>">
                         <div class="card-body">
-                            <p class="card-text font-weight-bold"><%= campground.name %> </p>
-                            <a href="/campgrounds/<%=campground.slug %>" class="btn btn-primary">More info</a>
+                            <h3 id="campground-name" class="card-text font-weight-bold text-body"><%= campground.name %> </h3>
+                            <h5>
+                                <span class="badge badge-secondary mb-3"><i class="fas fa-thumbs-up"></i> <%= campground.likes.length %> </span>
+                            </h5>
+                            <a href="/campgrounds/<%=campground.slug %>" class="btn btn-info">More info</a>
                         </div>
                     </div>                
                 </div>
