@@ -31,7 +31,7 @@
                                 </button>                                        
                             <%} %>                            
                         </form>
-                        <button type="button" class="btn">See More Details</button>
+                        <button type="button" class="btn" data-toggle="modal" data-target="#campgroundLikes">See More Details</button>
                     </div>
                     
                     <p class="card-text mt-3"><%= campground.description %></p>                    
@@ -76,15 +76,47 @@
                                 <%}%>
                             </div>
                         </div>
-                        <hr>
-                        
+                        <hr>                        
                     <%});%>
                 </div>
             </div>
-
         </div>
     </div>
-    
+</div>
+
+<div id="campgroundLikes" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">            
+            <div class="modal-header">
+                <h4 class="modal-title">Campground likes: <%= campground.likes.length %></h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>      
+            <div class="modal-body">
+                <table class="table table-borderless table-striped">
+                    <thead>
+                        <tr>
+                            <th>Likes by:</th>                             
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% campground.likes.forEach(function(like){ %>
+                            <tr>
+                                <td><i class="fas fa-user"></i> <%= like.username%></td>
+                            </tr>
+                        <%}); %>
+                        <% if(campground.likes.length === 0) {%>
+                            <tr>
+                                <td><em>No Likes yet.</em></td>
+                            </tr>
+                        <%}%>
+                    </tbody>
+                </table>
+            </div>      
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>    
+    </div>
 </div>
 
 <script>
