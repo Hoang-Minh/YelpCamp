@@ -23,6 +23,11 @@
                             <h5>
                                 <span class="badge badge-secondary mb-3"><i class="fas fa-thumbs-up"></i> <%= campground.likes.length %> </span>
                             </h5>
+                            <div>
+                                <% if(campground.reviews.length === 0) {%>
+                                    <em>No reviews yet.</em>
+                                <%}%>
+                            </div>
                             <a href="/campgrounds/<%=campground.slug %>" class="btn btn-info">More info</a>
                         </div>
                     </div>                

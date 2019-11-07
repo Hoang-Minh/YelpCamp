@@ -11,6 +11,7 @@ const express = require("express"),
   campgroundRoutes = require("./routes/campgrounds"),
   indexRoutes = require("./routes/index"),
   userRoutes = require("./routes/users"),
+  reviewRoutes = require("./routes/reviews"),
   methodOverride = require("method-override"),
   flash = require("connect-flash"),  
   session = require('express-session'),
@@ -98,6 +99,7 @@ app.use((req, res, next) => {
 app.use(indexRoutes);
 app.use("/campgrounds", campgroundRoutes);
 app.use("/campgrounds/:slug/comments", commentRoutes);
+//app.use("/campgrounds/:slug/reviews", reviewRoutes);
 app.use("/users", userRoutes);
 
 var port = process.env.PORT || 3000;

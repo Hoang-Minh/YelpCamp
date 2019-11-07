@@ -1,7 +1,7 @@
-var mongoose = require("mongoose");
-var comment = require("./comment");
+let mongoose = require("mongoose");
+let comment = require("./comment");
 
-var campgroundSchema = new mongoose.Schema({
+let campgroundSchema = new mongoose.Schema({
     name: {
         type: String,
         required: "Campground name cannot be blank."
@@ -38,7 +38,15 @@ var campgroundSchema = new mongoose.Schema({
             type: mongoose.Schema.Types.ObjectId,
             ref: "User"
         }
-    ]
+    ],
+    reviews: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Review"
+    },
+    rating: {
+        type: Number,
+        default: 0
+    }
 });
 
 campgroundSchema.pre('remove', async function() {
@@ -62,7 +70,7 @@ campgroundSchema.pre('save', async function (next) {
     }
 });
 
-var Campground = mongoose.model("Campground", campgroundSchema);
+let Campground = mongoose.model("Campground", campgroundSchema);
 
 module.exports = Campground;
 
@@ -73,13 +81,13 @@ async function generateUniqueSlug(id, campgroundName, slug) {
             slug = slugify(campgroundName);
         }
         // check if a campground with the slug already exists
-        var campground = await Campground.findOne({slug: slug});
+        let campground = await Campground.findOne({slug: slug});
         // check if a campground was found or if the found campground is the current campground
         if (!campground || campground._id.equals(id)) {
             return slug;
         }
         // if not unique, generate a new slug
-        var newSlug = slugify(campgroundName);
+        let newSlug = slugify(campgroundName);
         // check again by calling the function recursively
         return await generateUniqueSlug(id, campgroundName, newSlug);
     } catch (err) {
@@ -88,7 +96,7 @@ async function generateUniqueSlug(id, campgroundName, slug) {
 }
 
 function slugify(text) {
-    var slug = text.toString().toLowerCase()
+    let slug = text.toString().toLowerCase()
         .replace(/\s+/g, '-')        // Replace spaces with -
         .replace(/[^\w\-]+/g, '')    // Remove all non-word chars
         .replace(/\-\-+/g, '-')      // Replace multiple - with single -
