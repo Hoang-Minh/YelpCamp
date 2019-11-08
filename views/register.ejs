@@ -19,51 +19,65 @@
 </head>
 
 <body>
-    <!-- Add form -->
-    <!-- <div class="container" style="padding-top: 40px;">
-        <form class="student-search needs-validation" novalidate>
-            <div class="form-row">
-                <div class="form-group col-6">
-                    <label for="input-name-search" class="sr-only">Name</label>
-                    <input type="text" class="form-control" id="input-name-search" placeholder="Name" required>
-                    <div class="valid-feedback">Looks good!</div>
-                    <div class="invalid-feedback">Enter a name please.</div>
-                </div>
-                <div class="col-6">
-                    <button id="btn-search" type="submit" class="btn btn-success btn-block">Search student</button>
-                </div>
-            </div>
-        </form>
-    </div> -->
-
     <div class="container">
+        <%if(error && error.length > 0){%>
+        <div class="alert alert-danger" role="alert"><%= error%></div>
+        <%}%>
+        
+                <%if(success && success.length > 0){%>
+        <div class="alert alert-success" role="alert"><%= success%></div>
+        <%}%>
+    </div>
+    <div class="container">        
         <form class="form-horizontal needs-validation" role="form" method="POST" action="/register" novalidate>
-            <div class="row">
+            <div class="row mt-5">
                 <div class="col-md-3"></div>
                 <div class="col-md-6">
-                    <h2>Register New User</h2>
+                    <h2 class="text-center">Register New User</h2>
                     <hr>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-3 field-label-responsive">
-                    <label for="name">Name</label>
+                    <label for="username">Username</label>
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
                         <div class="input-group mb-2 mr-sm-2 mb-sm-0">
                             <div class="input-group-addon" style="width: 2.6rem"><i class="fa fa-user"></i></div>
-                            <input type="text" name="name" class="form-control" id="name" placeholder="John Doe"
-                                required autofocus>
+                            <input type="text" name="user[username]" class="form-control" id="username" placeholder="JohnDoe" required pattern="^[_a-zA-Z0-9\-]{5,15}$" autofocus>
+                            <div class="invalid-feedback">
+                                Must be alpha-numeric, dash or underscore, between 5 & 15 characters
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-3">
-                    <div class="form-control-feedback">
-                        <span class="talign-middle invalid-feedback">
-                            <!-- Put name validation error messages here -->
-                            Are you sure it's your name ?
-                        </span>                        
+            </div>
+            <div class="row">
+                <div class="col-md-3 field-label-responsive">
+                    <label for="firstName">First Name</label>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <div class="input-group mb-2 mr-sm-2 mb-sm-0">
+                            <div class="input-group-addon" style="width: 2.6rem"><i class="fa fa-user"></i></div>
+                            <input type="text" name="user[firstName]" class="form-control" id="firstName" placeholder="John" required>
+                            <div class="invalid-feedback">Enter a first name please.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3 field-label-responsive">
+                    <label for="lastName">Last Name</label>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <div class="input-group mb-2 mr-sm-2 mb-sm-0">
+                            <div class="input-group-addon" style="width: 2.6rem"><i class="fa fa-user"></i></div>
+                            <input type="text" name="user[lastName]" class="form-control" id="lastName" placeholder="Doe" required>
+                            <div class="invalid-feedback">Enter a last name please.</div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -75,17 +89,9 @@
                     <div class="form-group">
                         <div class="input-group mb-2 mr-sm-2 mb-sm-0">
                             <div class="input-group-addon" style="width: 2.6rem"><i class="fa fa-at"></i></div>
-                            <input type="text" name="email" class="form-control" id="email"
-                                placeholder="you@example.com" required autofocus>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="form-control-feedback">
-                        <span class="text-danger align-middle invalid-feedback">
-                            <!-- Put e-mail validation error messages here -->
-                            Email is invalid
-                        </span>
+                            <input type="email" name="user[email]" class="form-control" id="email"  placeholder="you@example.com" required pattern="^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$">
+                            <div class="invalid-feedback">Enter an email please.</div>
+                        </div>                        
                     </div>
                 </div>
             </div>
@@ -97,40 +103,18 @@
                     <div class="form-group has-danger">
                         <div class="input-group mb-2 mr-sm-2 mb-sm-0">
                             <div class="input-group-addon" style="width: 2.6rem"><i class="fa fa-key"></i></div>
-                            <input type="password" name="password" class="form-control" id="password"
-                                placeholder="Password" required>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="form-control-feedback">
-                        <span class="text-danger align-middle invalid-feedback">
-                            <i class="fa fa-close"> Password is not accepted</i>
-                        </span>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-3 field-label-responsive">
-                    <label for="password">Confirm Password</label>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <div class="input-group mb-2 mr-sm-2 mb-sm-0">
-                            <div class="input-group-addon" style="width: 2.6rem">
-                                <i class="fa fa-repeat"></i>
+                            <input type="password" name="user[password]" class="form-control" id="password"
+                                placeholder="Password" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}">
+                            <div class="invalid-feedback">
+                                Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters
                             </div>
-                            <input type="password" name="password-confirmation" class="form-control"
-                                id="password-confirm" placeholder="Password" required>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-md-3"></div>
-                <div class="col-md-6">
-                    <button type="submit" class="btn btn-success"><i class="fa fa-user-plus"></i> Register</button>
-                </div>
+           
+            <div class="d-flex justify-content-around mt-3">
+                <button type="submit" value="Send" class="btn btn-success"><i class="fa fa-user-plus"></i> Register</button>
             </div>
         </form>
     </div>
@@ -149,32 +133,18 @@
 
 <script>
     $(document).ready(function () {
-        // Grab all the forms
-        var forms = document.getElementsByClassName('needs-validation');
+        // Get the forms we want to add validation styles to
+        let forms = document.getElementsByClassName("needs-validation");
 
-        // Iterate over each one
-        for (let form of forms) {
-
-            // Add a 'submit' event listener on each one
-            form.addEventListener('submit', (evt) => {
-
-                // check if the form input elements have the 'required' attribute  
+        let validation = Array.prototype.filter.call(forms, form => {
+            form.addEventListener("submit", event => {
                 if (!form.checkValidity()) {
-                    evt.preventDefault();
-                    evt.stopPropagation();
-                    console.log('Bootstrap will handle incomplete form fields');
-                } else {
-                    // Since form is now valid, prevent default behavior..
-                    evt.preventDefault();
-                    console.info('All form fields are now valid...');
+                    event.preventDefault();
+                    event.stopPropagation();
                 }
-
                 form.classList.add('was-validated');
-
-            });
-
-        }
-
+            }, false);
+        }, false);
     });
 </script>
 
