@@ -1,0 +1,17 @@
+@media(min-width: 768px) {
+  .field-label-responsive {
+    padding-top: .5rem;
+    text-align: right;
+}
+}
+
+body{
+background-image: url("https://images.unsplash.com/photo-1532339142463-fd0a8979791a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1950&q=80");  
+}
+
+*[role="form"] {
+  font-weight: bolder;    
+  padding: 15px;
+  margin: 100px 1em 0;
+  border-radius: 0.3em;
+}
