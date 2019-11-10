@@ -57,14 +57,14 @@
   <header class="jumbotron jumbotron-fluid">
     <div class="container-fluid text-center">
       <h1 class="display-3">Welcome To YelpCamp!</h1>
-      <p class="lead pb-4">View our hand-picked campgrounds from all over the world</p>
+      <p class="lead pb-4">Deliver the best user experience campgrounds with our carefully observation and ratings</p>
       <p><a href="#" class="btn btn-primary btn-lg" role="button">Learn More</a></p>
     </div>
   </header>
 
   <section id="services" class="container">
       <%if(randomCampgrounds.length > 0) {%>
-        <h2 class="display-4 text-center mt-5 mb-3">Our Campgrounds</h2>
+        <h2 class="display-4 text-center mt-5 mb-3">Campgrounds</h2>
         <div class="row text-center">
           <%randomCampgrounds.forEach(randomCampground => {%>
             <div class="col-md-4 mb-4">
@@ -72,8 +72,12 @@
               <img class="card-img-top" src="<%= randomCampground.image.url%>" alt="Design">
               <div class="card-body">
                 <h4 class="card-title"><%= randomCampground.name %></h4>
+                <%if(randomCampground.reviews.length == 0) {%>
+                  <p class="card-text"><em>No Reviews yet</em></p>
+                <%} else {%>
                 <p class="card-text">Deliver the best user experience campgrounds
                   with our carefully observation and ratings</p>
+                <%}%>
               </div>
               <div class="card-footer py-4">
                 <a href="#" class="btn btn-secondary">More Details &raquo;</a>
