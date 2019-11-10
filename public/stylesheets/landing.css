@@ -20,3 +20,7 @@ body {
   /* background: url("https://images.unsplash.com/photo-1566041510394-cf7c8fe21800?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=934&q=80") repeat-x center; */
   background-color: #d6feff;
 }
+
+.star-checked {
+  color: orange;
+}

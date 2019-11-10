@@ -72,11 +72,15 @@
               <img class="card-img-top" src="<%= randomCampground.image.url%>" alt="Design">
               <div class="card-body">
                 <h4 class="card-title"><%= randomCampground.name %></h4>
-                <%if(randomCampground.reviews.length == 0) {%>
+                <p><%= randomCampground.description %></p>
+                <%if(randomCampground.rating === 0) {%>
                   <p class="card-text"><em>No Reviews yet</em></p>
                 <%} else {%>
-                <p class="card-text">Deliver the best user experience campgrounds
-                  with our carefully observation and ratings</p>
+                  <span class="fa fa-star star-checked"></span>
+                  <span class="fa fa-star <% if (randomCampground.rating > 1.5) { %> star-checked <% } %>"></span>
+                  <span class="fa fa-star <% if (randomCampground.rating > 2.5) { %> star-checked <% } %>"></span>
+                  <span class="fa fa-star <% if (randomCampground.rating > 3.5) { %> star-checked <% } %>"></span>
+                  <span class="fa fa-star <% if (randomCampground.rating > 4.5) { %> star-checked <% } %>"></span>
                 <%}%>
               </div>
               <div class="card-footer py-4">
