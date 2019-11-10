@@ -66,60 +66,28 @@
       <%if(randomCampgrounds.length > 0) {%>
         <h2 class="display-4 text-center mt-5 mb-3">Our Campgrounds</h2>
         <div class="row text-center">
-          
-        <div class="col-md-4 mb-4">
-          <div class="card h-100">
-            <img class="card-img-top" src="design.jpg" alt="Design">
-            <div class="card-body">
-              <h4 class="card-title">Design</h4>
-              <p class="card-text">Deliver the best user experience
-                with our carefully designed responsive websites and applications!</p>
+          <%randomCampgrounds.forEach(randomCampground => {%>
+            <div class="col-md-4 mb-4">
+            <div class="card h-100">
+              <img class="card-img-top" src="<%= randomCampground.image.url%>" alt="Design">
+              <div class="card-body">
+                <h4 class="card-title"><%= randomCampground.name %></h4>
+                <p class="card-text">Deliver the best user experience campgrounds
+                  with our carefully observation and ratings</p>
+              </div>
+              <div class="card-footer py-4">
+                <a href="#" class="btn btn-secondary">More Details &raquo;</a>
+              </div>
             </div>
-            <div class="card-footer py-4">
-              <a href="#" class="btn btn-secondary">See Profolio &raquo;</a>
-            </div>
-          </div>
         </div>
-
-        <div class="col-md-4 mb-4">
-          <div class="card h-100">
-            <img class="card-img-top" src="development.jpg" alt="Development">
-            <div class="card-body">
-              <h4 class="card-title">Development</h4>
-              <p class="card-text">You need software that works on every device.
-                Leverage the latest technologies and the most powerful tools!</p>
-            </div>
-            <div class="card-footer py-4">
-              <a href="#" class="btn btn-secondary">See projects &raquo;</a>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-md-4 mb-4">
-          <div class="card h-100">
-            <img class="card-img-top" src="analytics.jpg" alt="Analytics">
-            <div class="card-body">
-              <h4 class="card-title">Analytics</h4>
-              <p class="card-text">Consult our experts to set up proper goals and
-                find the best stack for your next application!</p>
-            </div>
-            <div class="card-footer py-4">
-              <a href="#" class="btn btn-secondary">See testimonials &raquo;</a>
-            </div>
-          </div>
-        </div>      
+          <%})%>
     </div>
     <div class="d-flex flex-row-reverse">
       <a href="/campgrounds">See More</a>
     </div>
-
-        
-
       <%} else {%>
         <h2>Please add you favorite campgrounds</h2>
       <%}%>
-
-    
   </section>
 
   <section class="container-fluid text-center py-4 mt-4" id="contact">
