@@ -37,7 +37,7 @@
                 </ul>
 
                 <ul class="navbar-nav">
-                <%if(!currentUserTest){%>
+                <%if(!currentUser){%>
                     <li class="nav-item">
                         <a class="nav-link" href="/register">SignUp <i class="fas fa-user-plus"></i></a>
                     </li>
@@ -46,7 +46,7 @@
                     </li>
                 <%} else {%>
                     <li class="nav-item">
-                        <a class="nav-link" href="/users/<%= currentUserTest._id %>"><span class="text-capitalize"><%=currentUserTest.username %></span></a>
+                        <a class="nav-link" href="/users/<%= currentUser._id %>"><span class="text-capitalize"><%=currentUser.username %></span></a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/logout">Logout <i class="fas fa-sign-out-alt"></i></a>

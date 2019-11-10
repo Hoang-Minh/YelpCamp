@@ -39,10 +39,12 @@ let campgroundSchema = new mongoose.Schema({
             ref: "User"
         }
     ],
-    reviews: {
+    reviews: [
+        {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Review"
-    },
+        }
+    ],
     rating: {
         type: Number,
         default: 0

@@ -56,7 +56,7 @@ router.get("/", async function(req, res){
             
         } else {
             // get from db
-            var campgrounds = await Campground.find({});
+            var campgrounds = await Campground.find({});            
             res.render("campgrounds/index", {campgrounds: campgrounds});        
         }
     } catch (error) {
@@ -98,7 +98,7 @@ router.post("/", middleware.isLoggedIn, upload.single("image"), async (req, res)
             url: result.secure_url,
             publicId: result.public_id
         }       
-
+        
         console.log(campground);
 
         let newlyCreatedCampground = await Campground.create(campground);        
