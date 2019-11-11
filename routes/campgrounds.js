@@ -66,9 +66,9 @@ router.get("/", async function(req, res){
     }
 });
 
-// CREATE - create new campground - done async
-router.post("/", middleware.isLoggedIn, upload.single("image"), async (req, res) => {
-    console.log(req.body);
+// CREATE - create new campground - done async - make sure the parameter name in the upload.single function match with the name attribute of the input type that try to upload the image
+router.post("/", middleware.isLoggedIn, upload.single("inputGroupFile01"), async (req, res) => {
+    console.log(req.file.path);
     try {
         let data = await geocoder.geocode(req.body.campground.location);       
 
