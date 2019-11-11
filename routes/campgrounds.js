@@ -68,7 +68,7 @@ router.get("/", async function(req, res){
 
 // CREATE - create new campground - done async
 router.post("/", middleware.isLoggedIn, upload.single("image"), async (req, res) => {
-
+    console.log(req.body);
     try {
         let data = await geocoder.geocode(req.body.campground.location);       
 

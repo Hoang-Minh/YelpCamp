@@ -4,33 +4,48 @@
     <div class="row">
         <div class="col-md-6 mx-auto">
             <div class="card card-body">
-                <h3 class="text-center mb-4">Create a new Campground</h3>
+                <h3 class="text-center mb-4">New Campground</h3>
                 <form action="/campgrounds" method="POST" enctype="multipart/form-data">
                     <fieldset>
                         <div class="form-group">
                             <input class="form-control input-lg" placeholder="Name" name="campground[name]" type="text">
                         </div>
                         <div class="form-group">
-                            <input class="form-control input-lg" placeholder="Description" name="campground[description]" type="text">
+                            <textarea class="form-control" rows="5" placeholder="Description" name="campground[description]"></textarea>
                         </div>                        
                         <div class="form-group">
                             <input class="form-control input-lg" placeholder="Price" name="campground[price]" type="number" min="0.01" step="0.01">
-                        </div>         
+                        </div>
                         
                         <div class="form-group">
                             <input class="form-control input-lg" placeholder="Yosemimte National Park, CA" name="campground[location]" type="text">
                         </div>
-                        <div class="custom-file">
-                            <input type="file" name="image" id="image" accept="image/*" required>                            
-                        </div>
-                        <div class="row">
-                            <div class="col-md-3 mt-3">
-                                <input class="btn btn-lg btn-success" value="Add" type="submit">
-                            </div>
-                            <div class="col-md-4 mt-3">
-                                <a class="btn btn-primary btn-lg" href="/campgrounds" role="button">Go Back</a>
+                        <div class="form-group">
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="inputGroupFileAddon01">Upload</span>
+                                </div>
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01" accept="image/*">
+                                    <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+                                </div>
                             </div>
                         </div>                        
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-3"></div>
+                                <div class="col-md-6">
+                                    <input class="btn btn-lg btn-primary btn-block" type="submit" value="Add">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-3"></div>
+                            <div class="col-md-6">
+                                <a class="btn btn-block btn-primary" href="/campgrounds" role="button">Back</a>
+                            </div>
+                        </div>                                         
                     </fieldset>
                 </form>
                 

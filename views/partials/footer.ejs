@@ -7,27 +7,35 @@
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
       integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
       crossorigin="anonymous"></script>
+      <script src="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.js"></script>
   
   <script type="text/javascript">
       $(document).ready(function () {
-          window.setTimeout(function () {
+        window.setTimeout(function () {
             $(".alert").fadeTo("slow", 0).slideUp(500, function () {
                 $(this).hide();
-        });
-      }, 2000);
+            });
+        }, 2000);
+
+        // for buton to upload image - create new campground form
+        $(document).on('change', '.custom-file-input', function (event) {
+            $(this).next('.custom-file-label').html(event.target.files[0].name);
+            console.log(event.target.files[0].name);
+        })        
           
-          //Get the forms we want to add validation styles to
-          let forms = document.getElementsByClassName("needs-validation");
-  
-          let validation = Array.prototype.filter.call(forms, form => {
-              form.addEventListener("submit", event => {
-                  if (!form.checkValidity()) {
-                      event.preventDefault();
-                      event.stopPropagation();
-                  }
-                  form.classList.add('was-validated');
-              }, false);
-          }, false);
+        //Get the forms we want to add validation styles to
+        let forms = document.getElementsByClassName("needs-validation");
+
+        // validate data on register and login form
+        let validation = Array.prototype.filter.call(forms, form => {
+            form.addEventListener("submit", event => {
+                if (!form.checkValidity()) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+                form.classList.add('was-validated');
+            }, false);
+        }, false);
   
           
       });

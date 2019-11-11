@@ -58,3 +58,16 @@
 #campground-name {
     margin-bottom: 0;
 }
+
+.test {
+    position: relative;
+    overflow: hidden;
+}
+
+/* #image {
+    position: absolute;
+    font-size: 50px;
+    opacity: 0;
+    right: 0;
+    top: 0;
+} */

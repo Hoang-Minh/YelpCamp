@@ -29,17 +29,18 @@
 
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav ml-auto">
-          <li class="nav-item active">
-            <a class="nav-link" href="#">Home
-              <span class="sr-only">(current)</span>
+          <li class="nav-item active">            
+            <a class="nav-link" href="#">
+              <i class="fas fa-home"></i> Home
+              <span class="sr-only">(current)</span>             
             </a>
           </li>
           <% if(!currentUser) {%>
           <li class="nav-item">
-              <a class="nav-link" href="/login">Login</a>
+              <a class="nav-link" href="/login"><i class="fas fa-sign-in-alt"></i> Login</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/register">Sign Up</a>
+            <a class="nav-link" href="/register"><i class="fas fa-user-plus"></i> Sign Up</a>
           </li>
           <%} else {%>
           <li class="nav-item">
@@ -67,12 +68,17 @@
         <h2 class="display-4 text-center mt-5 mb-3">Campgrounds</h2>
         <div class="row text-center">
           <%randomCampgrounds.forEach(randomCampground => {%>
-            <div class="col-md-4 mb-4">
+            <%if(randomCampgrounds.length === 2) {%>
+              <div class="col-md-6 mb-4">
+            <%} else {%>
+              <div class="col-md-4 mb-4">
+            <%}%>
+            
             <div class="card h-100">
               <img class="card-img-top" src="<%= randomCampground.image.url%>" alt="Design">
               <div class="card-body">
                 <h4 class="card-title"><%= randomCampground.name %></h4>
-                <p><%= randomCampground.description %></p>
+                <p><%= randomCampground.description%></p>
                 <%if(randomCampground.rating === 0) {%>
                   <p class="card-text"><em>No Reviews yet</em></p>
                 <%} else {%>
@@ -81,10 +87,11 @@
                   <span class="fa fa-star <% if (randomCampground.rating > 2.5) { %> star-checked <% } %>"></span>
                   <span class="fa fa-star <% if (randomCampground.rating > 3.5) { %> star-checked <% } %>"></span>
                   <span class="fa fa-star <% if (randomCampground.rating > 4.5) { %> star-checked <% } %>"></span>
+                  <span>(<%= randomCampground.reviews.length %>)</span>
                 <%}%>
               </div>
               <div class="card-footer py-4">
-                <a href="#" class="btn btn-secondary">More Details &raquo;</a>
+                <a href="/campgrounds/<%= randomCampground.slug %>" class="btn btn-secondary">More Details &raquo;</a>
               </div>
             </div>
         </div>
