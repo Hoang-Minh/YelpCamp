@@ -5,20 +5,20 @@
         <div class="col-md-6 mx-auto">
             <div class="card card-body">
                 <h3 class="text-center mb-4">New Campground</h3>
-                <form action="/campgrounds" method="POST" enctype="multipart/form-data">
+                <form id="add-campground" action="/campgrounds" method="POST" enctype="multipart/form-data">
                     <fieldset>
                         <div class="form-group">
-                            <input class="form-control input-lg" placeholder="Name" name="campground[name]" type="text">
+                            <input class="form-control input-lg" placeholder="Name" name="campground[name]" type="text" required autofocus>                            
                         </div>
                         <div class="form-group">
                             <textarea class="form-control" rows="5" placeholder="Description" name="campground[description]"></textarea>
                         </div>                        
                         <div class="form-group">
-                            <input class="form-control input-lg" placeholder="Price" name="campground[price]" type="number" min="0.01" step="0.01">
+                            <input class="form-control input-lg" placeholder="Price" name="campground[price]" type="number" min="0.01" step="0.01" required>
                         </div>
                         
                         <div class="form-group">
-                            <input class="form-control input-lg" placeholder="Yosemimte National Park, CA" name="campground[location]" type="text">
+                            <input class="form-control input-lg" placeholder="Yosemimte National Park, CA" name="campground[location]" type="text" required>
                         </div>
                         <div class="form-group">
                             <div class="input-group mb-3">
@@ -26,26 +26,27 @@
                                     <span class="input-group-text" id="inputGroupFileAddon01">Upload</span>
                                 </div>
                                 <div class="custom-file">
-                                    <input type="file" class="custom-file-input" id="inputGroupFile01" name="inputGroupFile01" aria-describedby="inputGroupFileAddon01" accept="image/*">
+                                    <input type="file" class="custom-file-input" id="inputGroupFile01" name="image" aria-describedby="inputGroupFileAddon01" accept="image/*">
                                     <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
                                 </div>
                             </div>
                         </div>                        
                         <div class="form-group">
                             <div class="row">
-                                <div class="col-md-3"></div>
                                 <div class="col-md-6">
-                                    <input class="btn btn-lg btn-primary btn-block" type="submit" value="Add">
+                                    <button class="btn btn-lg btn-success btn-block">
+                                        <a class="text-decoration-none" href="/campgrounds" role="button">Back</a>
+                                    </button>                                    
+                                </div>
+                                <div class="col-md-6">                                    
+                                    <button class="btn btn-lg btn-primary btn-block">
+                                        <a href="#" onclick="document.getElementById('add-campground').submit();"></a>Add
+                                    </button>                                    
                                 </div>
                             </div>
                         </div>
                         
-                        <div class="row">
-                            <div class="col-md-3"></div>
-                            <div class="col-md-6">
-                                <a class="btn btn-block btn-primary" href="/campgrounds" role="button">Back</a>
-                            </div>
-                        </div>                                         
+                                                       
                     </fieldset>
                 </form>
                 

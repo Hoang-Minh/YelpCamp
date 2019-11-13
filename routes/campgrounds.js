@@ -67,8 +67,7 @@ router.get("/", async function(req, res){
 });
 
 // CREATE - create new campground - done async - make sure the parameter name in the upload.single function match with the name attribute of the input type that try to upload the image
-router.post("/", middleware.isLoggedIn, upload.single("inputGroupFile01"), async (req, res) => {
-    console.log(req.file.path);
+router.post("/", middleware.isLoggedIn, upload.single("image"), async (req, res) => {    
     try {
         let data = await geocoder.geocode(req.body.campground.location);       
 
@@ -87,19 +86,22 @@ router.post("/", middleware.isLoggedIn, upload.single("inputGroupFile01"), async
 
         console.log(campground);
 
-        let uploadOptions = {
-            invalidate: true,
-            folder: process.env.CLOUDINARY_FOLDER                
-        };
-
-        let result = await cloudinary.uploader.upload(req.file.path, uploadOptions);
-        
-        campground.image = {
-            url: result.secure_url,
-            publicId: result.public_id
-        }       
-        
-        console.log(campground);
+        if(!req.file.path) {
+            let uploadOptions = {
+                invalidate: true,
+                folder: process.env.CLOUDINARY_FOLDER                
+            };
+    
+    
+            let result = await cloudinary.uploader.upload(req.file.path, uploadOptions);
+            
+            campground.image = {
+                url: result.secure_url,
+                publicId: result.public_id
+            }       
+            
+            console.log("Campground created: " + campground);
+        }
 
         let newlyCreatedCampground = await Campground.create(campground);        
         console.log("Newly Created Campground: " + newlyCreatedCampground);
