@@ -2,7 +2,7 @@
   .field-label-responsive {
     padding-top: .5rem;
     text-align: right;
-}
+  }
 }
 
 body{
@@ -14,4 +14,23 @@ background-image: url("https://images.unsplash.com/photo-1532339142463-fd0a89797
   padding: 15px;
   margin: 100px 1em 0;
   border-radius: 0.3em;
+}
+
+a#forgot-password:link{
+  color: whitesmoke;
+  text-decoration: underline;
+}
+
+a:visited {
+  color: whitesmoke;    
+  text-decoration: none;
+}
+
+a:hover {
+  color: whitesmoke;    
+  
+}
+
+a:active {
+  color: whitesmoke;    
 }
