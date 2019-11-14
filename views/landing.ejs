@@ -75,7 +75,7 @@
               <img class="card-img-top" src="<%= randomCampground.image.url%>" alt="Design">
               <div class="card-body">
                 <h4 class="card-title"><%= randomCampground.name %></h4>
-                <p><%= randomCampground.description%></p>
+                <p><%= randomCampground.description.substr(0, 100) + "..." %></p>
                 <%if(randomCampground.rating === 0) {%>
                   <p class="card-text"><em>No Reviews yet</em></p>
                 <%} else {%>
