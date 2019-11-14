@@ -1,59 +1,141 @@
-<% include ../partials/header %>
+<!DOCTYPE html>
+<html lang="en">
 
-<div id="main-section" class="container">
-    <div class="row">
-        <div class="col-md-6 mx-auto">
-            <div class="card card-body">
-                <h3 class="text-center mb-4">New Campground</h3>
-                <form id="add-campground" action="/campgrounds" method="POST" enctype="multipart/form-data">
-                    <fieldset>
-                        <div class="form-group">
-                            <input class="form-control input-lg" placeholder="Name" name="campground[name]" type="text" required autofocus>                            
-                        </div>
-                        <div class="form-group">
-                            <textarea class="form-control" rows="5" placeholder="Description" name="campground[description]"></textarea>
-                        </div>                        
-                        <div class="form-group">
-                            <input class="form-control input-lg" placeholder="Price" name="campground[price]" type="number" min="0.01" step="0.01" required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <input class="form-control input-lg" placeholder="Yosemimte National Park, CA" name="campground[location]" type="text" required>
-                        </div>
-                        <div class="form-group">
-                            <div class="input-group mb-3">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text" id="inputGroupFileAddon01">Upload</span>
-                                </div>
-                                <div class="custom-file">
-                                    <input type="file" class="custom-file-input" id="inputGroupFile01" name="image" aria-describedby="inputGroupFileAddon01" accept="image/*">
-                                    <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
-                                </div>
-                            </div>
-                        </div>                        
-                        <div class="form-group">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <button class="btn btn-lg btn-success btn-block">
-                                        <a class="text-decoration-none" href="/campgrounds" role="button">Back</a>
-                                    </button>                                    
-                                </div>
-                                <div class="col-md-6">                                    
-                                    <button class="btn btn-lg btn-primary btn-block">
-                                        <a href="#" onclick="document.getElementById('add-campground').submit();"></a>Add
-                                    </button>                                    
-                                </div>
-                            </div>
-                        </div>
-                        
-                                                       
-                    </fieldset>
-                </form>
-                
+<head>
+    <title>Document</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css"
+        integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="/stylesheets/app.css">
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/"><i class="fas fa-campground"></i> CAMPGROUND</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#bs-nav-demo"
+                aria-controls="bs-nav-demo" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="bs-nav-demo">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/campgrounds">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Contact</a>
+                    </li>
+                </ul>
+
+                <ul class="navbar-nav">
+                    <%if(!currentUser){%>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/register">SignUp <i class="fas fa-user-plus"></i></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/login">Login <i class="fas fa-sign-in-alt"></i></a>
+                    </li>
+                    <%} else {%>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/users/<%= currentUser._id %>"><span
+                                class="text-capitalize"><%=currentUser.username %></span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/logout">Logout <i class="fas fa-sign-out-alt"></i></a>
+                    </li>
+                    <%}%>
+                    </ul>
+                </div>
             </div>
-        </div>        
-    </div>
-    
-</div>
+    </nav>
 
-<% include ../partials/footer %>
+    <div id="main-section" class="container">
+        <div class="row">
+            <div class="col-md-6 mx-auto">
+                <div class="card card-body">
+                    <h3 class="text-center mb-4">New Campground</h3>
+                    <form id="add-campground" action="/campgrounds" method="POST" enctype="multipart/form-data">
+                        <fieldset>
+                            <div class="form-group">
+                                <input class="form-control input-lg" placeholder="Name" name="campground[name]"
+                                    type="text" required autofocus>
+                            </div>
+                            <div class="form-group">
+                                <textarea class="form-control" rows="5" placeholder="Description"
+                                    name="campground[description]"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <input class="form-control input-lg" placeholder="Price" name="campground[price]"
+                                    type="number" min="0.01" step="0.01" required>
+                            </div>
+
+                            <div class="form-group">
+                                <input class="form-control input-lg" placeholder="Yosemimte National Park, CA"
+                                    name="campground[location]" type="text" required>
+                            </div>
+                            <div class="form-group">
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" id="inputGroupFileAddon01">Upload</span>
+                                    </div>
+                                    <div class="custom-file">
+                                        <input type="file" class="custom-file-input" id="inputGroupFile01" name="image"
+                                            aria-describedby="inputGroupFileAddon01" accept="image/*">
+                                        <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+                                    </div>                                                                        
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-2"></div>
+                                    <div class="col-md-8">
+                                            <img id="image-preview" src="http://placehold.it/180" alt="your campground image" class="img-thumbnail" />
+                                    </div>
+                                    <div class="col-md-2"></div>                                    
+                                </div>
+                                
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <button class="btn btn-lg btn-success btn-block">
+                                            <a class="text-decoration-none" href="/campgrounds" role="button">Back</a>
+                                        </button>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <button class="btn btn-lg btn-primary btn-block">
+                                            <a href="#"
+                                                onclick="document.getElementById('add-campground').submit();"></a>Add
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+    integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+      integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+      crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+      integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+      crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.js"></script>
+    <script type="text/javascript" src="/js/preview-image.js"></script>
+</body>
+
+
+</html>

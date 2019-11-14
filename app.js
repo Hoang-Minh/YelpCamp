@@ -15,7 +15,8 @@ const express = require("express"),
   methodOverride = require("method-override"),
   flash = require("connect-flash"),  
   session = require('express-session'),
-  MongoStore = require('connect-mongo')(session);  
+  MongoStore = require('connect-mongo')(session);
+  path = require("path");
 
 //seedDb();
 mongoose.connect(process.env.DATABASE_URL, {
@@ -30,6 +31,7 @@ mongoose.connect(process.env.DATABASE_URL, {
 });
 
 app.use(express.static(__dirname + "/public"));
+//app.use("/public", express.static(path.join(__dirname + "public")));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 app.set("view engine", "ejs");
