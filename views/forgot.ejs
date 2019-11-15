@@ -1,20 +1,22 @@
 <% include partials/header %>
-<div id="register" class="container">
-    <div class="row">
-        <div class="col-md-6 mx-auto">
-                <div class="card card-body">
-                    <h3 class="text-center mb-4">Forgot Password</h3>
-                    <form action="/forgot" method="POST">
-                        <fieldset>
-                            <div class="form-group">
-                                <input class="form-control input-lg" placeholder="John@doe.com" name="email" type="email" required>
-                            </div>
-                            <input class="btn btn-lg btn-primary btn-block" value="Reset Password" type="submit">
-                        </fieldset>
-                    </form>                   
+<div id="register" class="container">    
+    <div class="col-md-5 mx-auto">
+        <div class="card card-body rounded">
+            <h3 class="text-center mb-4">Forgot Password</h3>
+            <form class="form-horizontal needs-validation" action="/forgot" method="POST" novalidate>
+                <fieldset>
+                    <div class="form-group">
+                        <input class="form-control input-lg" placeholder="John@doe.com" name="email" type="email" required pattern="^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$" autofocus>
+                        <div class="invalid-feedback">Enter an email please.</div>
+                    </div>                   
+                    
+                </fieldset>
+                <div>
+                    <input class="btn btn-lg btn-primary btn-block" value="Reset Password" type="submit">
                 </div>
+            </form>                   
         </div>
     </div>
 </div>
 
-<% include partials/footer %>
+<% include partials/footer/footer-validation %>

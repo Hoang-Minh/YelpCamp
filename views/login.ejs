@@ -1,4 +1,4 @@
-<% include partials/header-login-register %>
+<% include partials/header/header-login-register %>
     <div class="container">
         <%if(error && error.length > 0){%>
         <div class="alert alert-danger" role="alert"><%= error%></div>
@@ -26,7 +26,7 @@
                     <div class="form-group">
                         <div class="input-group mb-2 mr-sm-2 mb-sm-0">
                             <div class="input-group-addon" style="width: 2.6rem"><i class="fa fa-at"></i></div>
-                            <input type="email" name="email" class="form-control" id="email"  placeholder="you@example.com" required pattern="^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$">
+                            <input type="email" name="email" class="form-control" id="email"  placeholder="you@example.com" required pattern="^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$">
                             <div class="invalid-feedback">Enter an email please.</div>
                         </div>                        
                     </div>
@@ -63,9 +63,9 @@
 			<div class="row mt-3">
 				<div class="col-md-4"></div>
 				<div class="col-md-4">
-					<a type="button" class="btn btn-info btn-block" href="/register"><i class="fas fa-sign-in-alt"></i> Register</a>
+					<a type="button" class="btn btn-info btn-block" href="/register"><i class="fas fa-user-plus"></i> Register</a>
 				</div>							
 			</div>
         </form>
     </div>	
-<% include partials/footer-validation %>
+<% include partials/footer/footer-validation %>
