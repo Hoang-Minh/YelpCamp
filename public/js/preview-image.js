@@ -5,6 +5,8 @@ $(function() {
 
             reader.onload = function (e) {
                 $('#image-preview').attr('src', e.target.result);
+                $('#image-preview').width(150);
+                $('#image-preview').height(150);
                 $("#image-preview").show();
             };
 

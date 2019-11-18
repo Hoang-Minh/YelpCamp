@@ -104,7 +104,7 @@ app.use("/campgrounds/:slug/comments", commentRoutes);
 //app.use("/campgrounds/:slug/reviews", reviewRoutes);
 app.use("/users", userRoutes);
 
-var port = process.env.PORT || 3001;
+var port = process.env.PORT || 3000;
 
 app.listen(port, () => {
   console.log("Server is listening at port " + port);

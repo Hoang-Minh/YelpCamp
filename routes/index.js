@@ -29,7 +29,7 @@ router.get("/register", (req, res) => {
 
 //hanlde signup logic
 router.post("/register", async (req, res) => {
-  var newUser = req.body.user;
+  let newUser = req.body.user;
 
   try {
     const foundUser = await User.findOne({email: newUser.email});
@@ -39,12 +39,16 @@ router.post("/register", async (req, res) => {
       return res.redirect('back');
     }
 
+    if(newUser.email === process.env.GMAIL){
+      newUser.isAdmin = true;
+    }
+    
     // Hash the password
     const hash = await User.hashPassword(newUser.password);
 
     // Generate secret token
     const secretToken = randomstring.generate();
-    console.log("Secret Token: " + secretToken);
+    //console.log("Secret Token: " + secretToken);
 
     // Save secret token to the DB
     newUser.registerToken = secretToken;
@@ -184,7 +188,7 @@ router.get("/login", (req, res) => {
 router.post(
   "/login",
   passport.authenticate("local", {
-    successRedirect: "/campgrounds",
+    successRedirect: "/campgrounds/1",
     failureRedirect: "/login",
     failureFlash: true
   }),
@@ -280,13 +284,14 @@ router.post("/reset/:token", async (req, res) => {
     if (req.body.password === req.body.confirm){      
       user.resetPasswordToken = undefined;
       user.resetPasswordExpires = undefined;
+      user.isVerified = true; // set to true when user has successfully reset their password  
       await user.setPassword(req.body.password);
       await user.save();      
     } else {
       req.flash("error", "Passwords do not match.");
       return res.redirect("back");
-    }   
-  
+    }
+     
     var mailOptions = {
       to: user.email,
       from: process.env.GMAIL,

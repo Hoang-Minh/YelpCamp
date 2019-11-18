@@ -38,32 +38,54 @@ var options = {
 var geocoder = NodeGeoCoder(options);
 
 // INDEX - show all campgrounds - done async
-router.get("/", async function(req, res){
+router.get("/:page", async function(req, res){    
     try {
+        let recordsPerPage = 3;
+        let page = req.params.page || 1;
         
-        if(req.query.search){
-            const regex = new RegExp(escapeRegex(req.query.search), 'gi');
-            
-            // get from db
-            var campgrounds = await Campground.find({name: regex});
+        let count = await Campground.find({}).countDocuments();
+        let displayCampgrounds = await Campground.find({}).skip(recordsPerPage * page - recordsPerPage).limit(recordsPerPage);
     
-            if(campgrounds.length == 0){
-                req.flash("error", "No campgrounds match that query. Please try again");
-                return res.redirect("back");
-            }
-    
-            res.render("campgrounds/index", {campgrounds: campgrounds});
-            
-        } else {
-            // get from db
-            var campgrounds = await Campground.find({});            
-            res.render("campgrounds/index", {campgrounds: campgrounds});        
-        }
+        res.render("campgrounds/index", {
+            campgrounds: displayCampgrounds,
+            current: page,
+            pages: Math.ceil(count / recordsPerPage)
+        });
+        
     } catch (error) {
         console.log(error);
         req.flash("error", "Something is wrong. Please try again");
-        return res.redirect("back");
+         res.redirect("back");
     }
+    
+
+
+    //res.render("campgrounds/index-pagination");
+    // try {
+        
+    //     if(req.query.search){
+    //         const regex = new RegExp(escapeRegex(req.query.search), 'gi');
+            
+    //         // get from db
+    //         var campgrounds = await Campground.find({name: regex});
+    
+    //         if(campgrounds.length == 0){
+    //             req.flash("error", "No campgrounds match that query. Please try again");
+    //             return res.redirect("back");
+    //         }
+    
+    //         res.render("campgrounds/index", {campgrounds: campgrounds});
+            
+    //     } else {
+    //         // get from db
+    //         var campgrounds = await Campground.find({});            
+    //         res.render("campgrounds/index", {campgrounds: campgrounds});        
+    //     }
+    // } catch (error) {
+    //     console.log(error);
+    //     req.flash("error", "Something is wrong. Please try again");
+    //     return res.redirect("back");
+    // }
 });
 
 // CREATE - create new campground - done async - make sure the parameter name in the upload.single function match with the name attribute of the input type that try to upload the image
@@ -86,7 +108,7 @@ router.post("/", middleware.isLoggedIn, upload.single("image"), async (req, res)
 
         console.log(campground);
 
-        if(!req.file.path) {
+        if(req.file.path) {
             let uploadOptions = {
                 invalidate: true,
                 folder: process.env.CLOUDINARY_FOLDER                
@@ -116,7 +138,7 @@ router.post("/", middleware.isLoggedIn, upload.single("image"), async (req, res)
 });
 
 // NEW - show form to create new campground
-router.get("/new", middleware.isLoggedIn, function(req, res){
+router.get("/new/campground", middleware.isLoggedIn, function(req, res){
     res.render("campgrounds/newCampground");
 });
 
