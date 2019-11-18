@@ -1,31 +1,30 @@
 <% include ../partials/header/header-landing %>
 
-<div id="main-section" class="container">       
-
+<div id="main-section" class="container">
     <div class="row" id="listing-table">
-        <% campgrounds.forEach(function(campground){%>            
+        <% campgrounds.forEach(function(campground) { %>            
                 <div class="col-sm-6 col-md-4 mb-5 px-2">
                     <div class="card text-center">            
-                        <img id="campground-image" class="card-img-top px-1 py-1" src="<%= campground.image.url %>" alt="<#= campground.name %>">
+                        <img id="campground-image" class="card-img-top px-1 py-1" src="<%= campground.image.url %>" alt="<%= campground.name %>">
                         <div class="card-body">
-                            <h3 id="campground-name" class="card-text font-weight-bold text-body"><%= campground.name %> </h3>
-                            <h5>
-                                <span class="badge badge-secondary mb-3"><i class="fas fa-thumbs-up"></i> <%= campground.likes.length %> </span>
-                            </h5>
+                            <h3 id="campground-name" class="card-text font-weight-bold text-body"><%= campground.name %> </h3>                            
                             <div>
                                 <% if(campground.reviews.length === 0) {%>
                                     <em>No reviews yet.</em>
                                 <%}%>
-                            </div>
-                            <a href="/campgrounds/<%=campground.slug %>" class="btn btn-info">More info</a>
+                            </div>                            
+                        </div>
+                        
+                        <div class="card-footer py-4">
+                            <a href="/campgrounds/<%= campground.slug %>" class="btn btn-secondary">More Details &raquo;</a>
                         </div>
                     </div>                
                 </div>
         <%})%>
     </div>
 
-    <% if(pages > 0) {%>
-        <nav aria-label="Page navigation example">
+    <nav aria-label="Page navigation example">
+        <% if(pages > 0) {%>
             <ul class="pagination justify-content-end">
                 <% if(current == 1) {%>                    
                     <li class="page-item disabled">
@@ -36,7 +35,7 @@
                         <a class="page-link" href="/campgrounds/page/1">Previous</a>
                     </li>
                 <%}%>
-                <% let i = (Number(current) > 5 ? Number(current) - 4 : 1) %>
+                <% let i = (Number(current) > 5 ? Number(current) - 4 : 1); %>
                 <% if(i !== 1) {%>
                     <li class="page-item disabled"><a class="page-link" href="#">...</a></li>
                 <%}%>
@@ -54,16 +53,15 @@
                         <li class="page-item disabled"><a class="page-link">Next</a></li>
                     <% } else { %>
                         <li class="page-item"><a class="page-link" href="/campgrounds/page/<%= pages %>">Next</a></li>
-                <% } %>
-                </li>
+                <% } %>                
             </ul>
-        </nav>
-    <%}%>
+        <%}%>
+    </nav>
+
     <div class="container">
         <p class="lead text-center">
             <a class="btn btn-lg btn-primary" href="/campgrounds/new" role="button">Add New Campground</a>
         </p>
-    </div>
-
-    <% include ../partials/footer %>    
+    </div>           
 </div>
+<% include ../partials/footer %>

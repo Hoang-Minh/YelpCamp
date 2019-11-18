@@ -5,7 +5,7 @@ body {
 .jumbotron {
   background: url("https://images.unsplash.com/photo-1446604123913-6757dcdd6a0b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2100&q=80") no-repeat center;
 }
-.btn-primary {
+.red-button {
   background-color: #c60063;
   border-color: #c60063;
 }

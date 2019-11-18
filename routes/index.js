@@ -188,7 +188,7 @@ router.get("/login", (req, res) => {
 router.post(
   "/login",
   passport.authenticate("local", {
-    successRedirect: "/campgrounds/1",
+    successRedirect: "/campgrounds/page/1",
     failureRedirect: "/login",
     failureFlash: true
   }),
@@ -201,7 +201,7 @@ router.post(
 router.get("/logout", (req, res) => {
   req.logOut();
   req.flash("success", "Logged you out");
-  res.redirect("/campgrounds");
+  res.redirect("/");
 });
 
 router.get("/forgot", (req, res) => {
