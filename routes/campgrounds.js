@@ -38,9 +38,9 @@ var options = {
 var geocoder = NodeGeoCoder(options);
 
 // INDEX - show all campgrounds - done async
-router.get("/:page", async function(req, res){    
+router.get("/page/:page", async function(req, res){    
     try {
-        let recordsPerPage = 3;
+        let recordsPerPage = 6;
         let page = req.params.page || 1;
         
         let count = await Campground.find({}).countDocuments();
@@ -128,7 +128,7 @@ router.post("/", middleware.isLoggedIn, upload.single("image"), async (req, res)
         let newlyCreatedCampground = await Campground.create(campground);        
         console.log("Newly Created Campground: " + newlyCreatedCampground);
         req.flash("success", "A new campground has been created");
-        res.redirect("/campgrounds");
+        res.redirect("/campgrounds/1");
 
     } catch (error) {
         console.log(error);
@@ -138,7 +138,7 @@ router.post("/", middleware.isLoggedIn, upload.single("image"), async (req, res)
 });
 
 // NEW - show form to create new campground
-router.get("/new/campground", middleware.isLoggedIn, function(req, res){
+router.get("/new", middleware.isLoggedIn, function(req, res){
     res.render("campgrounds/newCampground");
 });
 
