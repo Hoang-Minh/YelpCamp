@@ -38,7 +38,7 @@
             <a class="nav-link" href="#loginModal" data-toggle="modal">Login <i class="fas fa-sign-in-alt"></i></a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/register"><i class="fas fa-user-plus"></i> Sign Up</a>
+            <a class="nav-link" href="#registerModal" data-toggle="modal"><i class="fas fa-user-plus"></i> Sign Up</a>
           </li>
           <%} else {%>
           <li class="nav-item">
@@ -61,16 +61,16 @@
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             </div>
             <div class="modal-body">
-                <form class="form" role="form" autocomplete="off" id="formLogin" action="/login" novalidate="" method="POST">
+                <form class="form needs-validation" role="form" autocomplete="off" id="formLogin" action="/login" novalidate method="POST">
                     <div class="form-group">
                         <a href="/register" class="float-right">New user?</a>
                         <label for="email">Email</label>
-                        <input type="text" class="form-control form-control-lg" name="email" id="email" required="">
+                        <input type="text" class="form-control form-control-lg" name="email" id="email" placeholder="you@example.com" required pattern="^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$">
                         <div class="invalid-feedback">Oops, you missed this one.</div>
                     </div>
                     <div class="form-group">
                         <label>Password</label>
-                        <input type="password" class="form-control form-control-lg" id="pwd1" required="" name = "password" autocomplete="new-password">
+                        <input type="password" class="form-control form-control-lg" id="pwd1" name = "password" placeholder="Password" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" autocomplete="new-password">
                         <div class="invalid-feedback">Enter your password too!</div>
                     </div>
                     <div class="custom-control custom-checkbox">
@@ -79,10 +79,60 @@
                     </div>
                     <div class="form-group py-4">
                         <button class="btn btn-outline-secondary btn-lg" data-dismiss="modal" aria-hidden="true">Cancel</button>
-                        <button type="submit" class="btn btn-success btn-lg float-right" id="btnLogin">Login</button>
+                        <button type="submit" class="btn btn-success btn-lg float-right">Login</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
+  </div>
+
+  <div id="registerModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Sign Up</h3>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <div class="modal-body">
+                <form class="form needs-validation" role="form" autocomplete="off" id="formLogin" action="/register" novalidate method="POST">
+                    <div class="form-group">                        
+                        <label for="username">Username</label>
+                        <input type="text" class="form-control form-control-lg" name="user[username]" id="username" placeholder="username" required pattern="^[_a-zA-Z0-9\-]{5,15}$">
+                        <div class="invalid-feedback">Must be alpha-numeric, dash or underscore, between 5 & 15 characters</div>
+                    </div>
+                    <div class="form-group">                        
+                      <label for="firstName">First Name</label>
+                      <input type="text" class="form-control form-control-lg" name="user[firstName]" id="firstName" placeholder="John" required>
+                      <div class="invalid-feedback">Oops, you missed this one.</div>
+                    </div>
+                    <div class="form-group">                        
+                      <label for="lastName">Last Name</label>
+                      <input type="text" class="form-control form-control-lg" name="user[lastName]" id="lastName" placeholder="Doe" required>
+                      <div class="invalid-feedback">Oops, you missed this one.</div>
+                    </div>
+                    <div class="form-group">                        
+                      <label for="email">Email</label>
+                      <input type="email" class="form-control form-control-lg" name="user[email]" id="email" placeholder="you@example.com" required pattern="^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$">
+                      <div class="invalid-feedback">Oops, you missed this one.</div>
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" class="form-control form-control-lg" id="pwd1" name = "password" placeholder="Password" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" autocomplete="new-password">
+                        <div class="invalid-feedback">Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters</div>
+                    </div>
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="rememberMe">
+                      <label class="custom-control-label" for="rememberMe">Remember me on this computer</label>
+                    </div>
+                    <div class="form-group py-4">
+                        <button class="btn btn-outline-secondary btn-lg" data-dismiss="modal" aria-hidden="true">Cancel</button>
+                        <button type="submit" class="btn btn-success btn-lg float-right">Register</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+  </div>
+    
 </div>
