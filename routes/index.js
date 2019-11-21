@@ -313,4 +313,8 @@ router.post("/reset/:token", async (req, res) => {
   }  
 });
 
+router.get("/contact", async(req, res, next) => {
+  res.render("contact")
+});
+
 module.exports = router;
