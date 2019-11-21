@@ -1,4 +1,4 @@
-<% include partials/header %>
+<% include partials/header/header-landing %>
     <div id="main-section" class="container">
         <form id="verify-form" action="/verify" Method="POST">
             <input type="hidden" name="token" value="<%= token%>">
@@ -6,4 +6,4 @@
         </form>
     </div>
 
- <% include partials/footer %>   
+ <% include partials/footer/footer-validation %>   

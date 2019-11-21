@@ -1,14 +1,30 @@
-<% include ../partials/header %>
+<% include ../partials/header/header-landing %>
+<div class="container mt-5">
+    <div class="row">
+        <div class="col">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/campgrounds/page/1">All Campgrounds</a></li>
+                    <li class="breadcrumb-item active" aria-current="page"><%= campground.name %></li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+</div>
 
 <div id="main-section"class="container">    
     <div class="row">
         <div class="col-md-3">
-            <p class="lead">Yelp Camp</p>
-            <ul class="list-group">
-                <li class="list-group-item active">Info 1</li>
-                <li class="list-group-item">Info 2</li>
-                <li class="list-group-item">Info 3</li>                
-            </ul>
+            <!-- <p class="lead">Yelp Camp</p> -->
+            <div class="card-body">
+                    <div class="card bg-light">
+                        <div class="card-header bg-success text-white text-uppercase"><i class="fa fa-home"></i> Address</div>
+                        <div class="card-body">
+                            <p id="address" class="card-text">1216 S Magnolia Ave, Anaheim, CA 92804</p>
+                            <p class="card-text">Phone: (714) 229-0618</p>
+                        </div>
+                    </div>                    
+                </div>
             <div id="map"></div>
         </div>
         <div class="col-md-9">

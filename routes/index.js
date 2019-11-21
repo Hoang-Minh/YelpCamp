@@ -10,10 +10,9 @@ var Campground = require("../models/campground");
 // root route
 router.get("/", async (req, res) => {
   try{
-    let randomCampgrounds = await Campground.find().limit(3);
-    //console.log(randomCampgrounds.length);
-    res.render("landing", {randomCampgrounds: randomCampgrounds});
-    //res.render("campgrounds/index", {campgrounds: campgrounds});        
+    let randomCampgrounds = await Campground.find().limit(3);    
+    res.render("index", {randomCampgrounds: randomCampgrounds});
+    
   } catch(error) {
     console.log(error);
     req.flash("error", "Something is wrong, cannot load landing page");
