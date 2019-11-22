@@ -78,7 +78,7 @@ passport.use("local", new LocalStrategy({
 
     // 3) Check if email has been verified
     if (!user.isVerified) {
-      return done(null, false, { message: 'Your account has not been activated yet.\n\n Please complete verification email.' });
+      return done(null, false, { message: 'Your account has not been activated yet.\n\n Please follow instructions in the verification email.' });
     }
 
     return done(null, user);

@@ -17,14 +17,14 @@
         <div class="col-md-3">
             <!-- <p class="lead">Yelp Camp</p> -->
             <div class="card-body">
-                    <div class="card bg-light">
-                        <div class="card-header bg-success text-white text-uppercase"><i class="fa fa-home"></i> Address</div>
-                        <div class="card-body">
-                            <p id="address" class="card-text">1216 S Magnolia Ave, Anaheim, CA 92804</p>
-                            <p class="card-text">Phone: (714) 229-0618</p>
-                        </div>
-                    </div>                    
-                </div>
+                <div class="card bg-light">
+                    <div class="card-header bg-success text-white text-uppercase"><i class="fa fa-home"></i> Address</div>
+                    <div class="card-body">
+                        <p id="address" class="card-text"><%= campground.location%></p>
+                        <p class="card-text">Phone: (714) xxx-xxxx</p>
+                    </div>
+                </div>                    
+            </div>
             <div id="map"></div>
         </div>
         <div class="col-md-9">
@@ -64,9 +64,13 @@
             </div>
             <div class="card mt-3">
                 <div class="card-footer">
-                    <div class="row justify-content-end">
-                        <a href="/campgrounds/<%= campground.slug%>/comments/new" class="btn btn-success btn-sm">Add New Comment</a>
-                    </div>
+                    <form id="submit-comment" action="/campgrounds/<%= campground.slug %>/comments" method="post">
+                        <div class="row justify-content-end">                        
+                            <button class="btn btn-success btn-sm" id="add-comment">Add New Comment</button>
+                        </div>
+                    </form>                    
+                    
+                    
                     <hr>
                     <% campground.comments.forEach(function(comment){%>
                         <div class="row justify-content-between">
@@ -170,4 +174,4 @@
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBIOjv1EkxbXL9bjpJakZpSdc8JTceXwGs&callback=initMap">
 </script>
 
-<% include ../partials/footer %>
+<% include ../partials/footer/footer-validation %>

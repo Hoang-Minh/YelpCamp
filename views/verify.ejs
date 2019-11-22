@@ -1,6 +1,6 @@
 <% include partials/header/header-landing %>
     <div id="main-section" class="container">
-        <form id="verify-form" action="/verify" Method="POST">
+        <form id="verify-account-form" action="/verify" Method="POST">
             <input type="hidden" name="token" value="<%= token%>">
             <input type="submit" class="btn btn-primary" value="Continue" style="display: none;">
         </form>

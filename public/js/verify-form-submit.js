@@ -1,5 +1,5 @@
 $(function(){
     window.setTimeout(function(){
-        $("#verify-form").submit();
+        $("#verify-account-form").submit();
     });
 });
