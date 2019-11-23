@@ -1,23 +1,60 @@
-<% include partials/header/header-login-register %>
-<div id="input-form" class="container">
-    <div class="row">
-        <div class="col-md-6 mx-auto">
-            <div class="card card-body">
-                <h3 class="text-center mb-4">Reset Password</h3>
-                <form action="/reset/<%= token%>" method="POST">
-                    <fieldset>
-                        <div class="form-group">
-                            <input class="form-control input-lg" placeholder="New Password" name="password" type="password">
-                        </div>
-                        <div class="form-group">
-                            <input class="form-control input-lg" placeholder="Confirm Password" name="confirm" type="password">
-                        </div>
-                        <input class="btn btn-lg btn-primary btn-block" value="Reset Password" type="submit">
-                    </fieldset>
-                </form>
+<% include partials/header/header-landing %>
+<div class="container mt-5">
+    <form class="form-horizontal needs-validation" role="form" method="POST" action="/reset/<%= token%>" novalidate>
+        <div class="row mt-5">
+            <div class="col-md-3"></div>
+            <div class="col-md-6">
+                <h1 class="text-center">Reset Password</h1>
             </div>
         </div>
-    </div>
+        <hr>
+        
+        <div class="row mt-5">
+            <div class="col-md-3 field-label-responsive">
+                <label for="password">Password</label>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group has-danger">
+                    <div class="input-group mb-2 mr-sm-2 mb-sm-0">
+                        <div class="input-group-addon" style="width: 2.6rem"><i class="fa fa-key"></i></div>
+                        <input type="password" name="password" class="form-control" id="password" placeholder="Password"
+                            required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}">
+                        <div class="invalid-feedback">
+                            Must contain at least one number and one uppercase and lowercase letter, and at least 8 or
+                            more characters
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-3 field-label-responsive">
+                <label for="password">Confirm Password</label>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group has-danger">
+                    <div class="input-group mb-2 mr-sm-2 mb-sm-0">
+                        <div class="input-group-addon" style="width: 2.6rem"><i class="fa fa-key"></i></div>
+                        <input type="password" name="password" class="form-control" id="password" placeholder="Password"
+                            required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}">
+                        <div class="invalid-feedback">
+                            Must contain at least one number and one uppercase and lowercase letter, and at least 8 or
+                            more characters
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-3">
+            <div class="col-md-4"></div>
+            <div class="col-md-4">
+                <button type="submit" class="btn btn-success btn-block"><i class="fas fa-sign-in-alt"></i> Reset
+                    Password</button>
+            </div>
+        </div>
+    </form>
 </div>
 
 <% include partials/footer/footer-validation %>

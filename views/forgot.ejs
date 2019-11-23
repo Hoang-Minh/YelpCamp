@@ -1,22 +1,36 @@
-<% include partials/header/header-login-register %>
-<div id="input-form" class="container">    
-    <div class="col-md-5 mx-auto">
-        <div class="card card-body rounded">
-            <h3 class="text-center mb-4">Forgot Password</h3>
-            <form class="form-horizontal needs-validation" action="/forgot" method="POST" novalidate>
-                <fieldset>
-                    <div class="form-group">
-                        <input class="form-control input-lg" placeholder="John@doe.com" name="email" type="email" required pattern="^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$" autofocus>
-                        <div class="invalid-feedback">Enter an email please.</div>
-                    </div>                   
-                    
-                </fieldset>
-                <div>
-                    <input class="btn btn-lg btn-primary btn-block" value="Reset Password" type="submit">
-                </div>
-            </form>                   
+<% include partials/header/header-landing %>
+<div class="container mt-5">    
+    <form class="form-horizontal needs-validation" role="form" method="POST" action="/forgot" novalidate>
+        
+        <div class="row mt-5">
+            <div class="col-md-3"></div>
+            <div class="col-md-6">
+                <h1 class="text-center">Forgot Password</h1>                    
+            </div>
         </div>
-    </div>
+        <hr>
+        <div class="row mt-5">
+            <div class="col-md-3 field-label-responsive">
+                <label for="email">E-Mail Address</label>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <div class="input-group mb-2 mr-sm-2 mb-sm-0">
+                        <div class="input-group-addon" style="width: 2.6rem"><i class="fa fa-at"></i></div>
+                        <input type="email" name="email" class="form-control" id="email"  placeholder="you@example.com" required pattern="^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$">
+                        <div class="invalid-feedback">Enter an email please.</div>
+                    </div>                        
+                </div>
+            </div>
+        </div>            
+
+        <div class="row mt-3">				
+            <div class="col-md-4"></div>
+            <div class="col-md-4">
+                <button type="submit" class="btn btn-success btn-block"><i class="fas fa-sign-in-alt"></i> Reset Password</button>
+            </div>							
+        </div>			
+    </form>
 </div>
 
 <% include partials/footer/footer-validation %>
