@@ -57,35 +57,6 @@ router.get("/page/:page", async function(req, res){
         req.flash("error", "Something is wrong. Please try again");
          res.redirect("back");
     }
-    
-
-
-    //res.render("campgrounds/index-pagination");
-    // try {
-        
-    //     if(req.query.search){
-    //         const regex = new RegExp(escapeRegex(req.query.search), 'gi');
-            
-    //         // get from db
-    //         var campgrounds = await Campground.find({name: regex});
-    
-    //         if(campgrounds.length == 0){
-    //             req.flash("error", "No campgrounds match that query. Please try again");
-    //             return res.redirect("back");
-    //         }
-    
-    //         res.render("campgrounds/index", {campgrounds: campgrounds});
-            
-    //     } else {
-    //         // get from db
-    //         var campgrounds = await Campground.find({});            
-    //         res.render("campgrounds/index", {campgrounds: campgrounds});        
-    //     }
-    // } catch (error) {
-    //     console.log(error);
-    //     req.flash("error", "Something is wrong. Please try again");
-    //     return res.redirect("back");
-    // }
 });
 
 // CREATE - create new campground - done async - make sure the parameter name in the upload.single function match with the name attribute of the input type that try to upload the image

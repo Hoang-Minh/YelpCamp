@@ -12,6 +12,7 @@ const express = require("express"),
   indexRoutes = require("./routes/index"),
   userRoutes = require("./routes/users"),
   reviewRoutes = require("./routes/reviews"),
+  contactRoutes = require("./routes/contact");
   methodOverride = require("method-override"),
   flash = require("connect-flash"),  
   session = require('express-session'),
@@ -99,6 +100,7 @@ app.use((req, res, next) => {
 });
 
 app.use(indexRoutes);
+app.use("/contact", contactRoutes);
 app.use("/campgrounds", campgroundRoutes);
 app.use("/campgrounds/:slug/comments", commentRoutes);
 //app.use("/campgrounds/:slug/reviews", reviewRoutes);
