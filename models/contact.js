@@ -10,9 +10,13 @@ let contactSchema = new mongoose.Schema({
         required: "Contact name cannot be blank."
     },
     email: {
-        type: String,
-        unique: true,
+        type: String,        
         required: "Contact email cannot be blank."
+    },
+    subject: String,
+    createdAt: {
+        type: Date,
+        default: Date.now()
     }
 });
 
