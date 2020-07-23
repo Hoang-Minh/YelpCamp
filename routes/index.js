@@ -5,6 +5,7 @@ const User = require("../models/user");
 const crypto = require("crypto");
 const mailhelper = require("../public/js/mailhelper");
 const randomstring = require("randomstring");
+const moment = require("moment");
 
 // root route
 router.get("/", (req, res) => {
@@ -21,11 +22,11 @@ router.post("/register", async (req, res) => {
   var newUser = req.body.user;
 
   try {
-    const foundUser = await User.findOne({email: newUser.email});
+    const foundUser = await User.findOne({ email: newUser.email });
 
-    if(foundUser){
-      req.flash('error', 'Email is already in use.');
-      return res.redirect('back');
+    if (foundUser) {
+      req.flash("error", "Email is already in use.");
+      return res.redirect("back");
     }
 
     // Hash the password
@@ -37,10 +38,11 @@ router.post("/register", async (req, res) => {
 
     // Save secret token to the DB
     newUser.registerToken = secretToken;
-    newUser.registerTokenExpires = Date.now() + 3600000; // 1hr    
+    newUser.registerTokenExpires = Date.now() + 3600000; // 1hr
+    newUser.avatar = `http://gravatar.com/avatar/${moment().unix()}?d=identicon`;
 
     // need to hash password
-    newUser.password = hash;       
+    newUser.password = hash;
 
     const content =
       "Thank you for becoming a Yelp Camp user.\n\n" +
@@ -50,59 +52,55 @@ router.post("/register", async (req, res) => {
       "/register/" +
       secretToken +
       "\n\n" +
-      "If you did not register, please ignore this email.\n"
+      "If you did not register, please ignore this email.\n";
 
     const mailOptions = {
       to: newUser.email,
       from: process.env.GMAIL,
       subject: "Yelp Camp Registration",
-      text: content
-    }
+      text: content,
+    };
 
     await mailhelper.sendMail(mailOptions);
 
-    // save to database    
-    const user = await new User(newUser); 
+    // save to database
+    const user = await new User(newUser);
     await user.save();
     req.flash(
       "success",
       "An e-mail has been sent to " + user.email + " with further instructions."
     );
     res.redirect("/login");
-
-
   } catch (error) {
     console.log(error);
     req.flash("error", "Something is wrong....");
     return res.redirect("back");
   }
-
 });
 
-router.get("/register/:token", async (req, res) => {  
-  res.render("verify", {token: req.params.token} );  
+router.get("/register/:token", async (req, res) => {
+  res.render("verify", { token: req.params.token });
 });
 
-router.post("/verify", async (req, res) => {  
+router.post("/verify", async (req, res) => {
   try {
-    let user = await User.findOne(
-      {
-        registerToken: req.body.token,
-        registerTokenExpires: {$gt: Date.now()}
-      });
+    let user = await User.findOne({
+      registerToken: req.body.token,
+      registerTokenExpires: { $gt: Date.now() },
+    });
 
-      if(!user){        
-        req.flash("error", "Register token is invalid or has expired.");
-        return res.redirect("/resend");
-      }
+    if (!user) {
+      req.flash("error", "Register token is invalid or has expired.");
+      return res.redirect("/resend");
+    }
 
-      user.isVerified = true;
-      user.registerToken = undefined;
-      user.registerTokenExpires = undefined;      
-      await user.save();
-      
-      req.flash("success", "Thank you for completing registration process");
-      return res.redirect("/login");
+    user.isVerified = true;
+    user.registerToken = undefined;
+    user.registerTokenExpires = undefined;
+    await user.save();
+
+    req.flash("success", "Thank you for completing registration process");
+    return res.redirect("/login");
   } catch (error) {
     console.log(error);
     req.flash("error", "Something is wrong....");
@@ -112,13 +110,13 @@ router.post("/verify", async (req, res) => {
 
 router.get("/resend", async (req, res) => {
   res.render("resend");
-})
+});
 
-router.post("/resend", async(req, res) => {
+router.post("/resend", async (req, res) => {
   try {
-    const user = await User.findOne({email: req.body.email});
+    const user = await User.findOne({ email: req.body.email });
 
-    if(!user){
+    if (!user) {
       req.flash("error", "No account associated with the provied email");
       return res.redirect("back");
     }
@@ -129,7 +127,7 @@ router.post("/resend", async(req, res) => {
 
     // Save secret token to the DB
     user.registerToken = secretToken;
-    user.registerTokenExpires = Date.now() + 3600000; // 1hr    
+    user.registerTokenExpires = Date.now() + 3600000; // 1hr
 
     const content =
       "Thank you for becoming a Yelp Camp user.\n\n" +
@@ -139,18 +137,18 @@ router.post("/resend", async(req, res) => {
       "/register/" +
       secretToken +
       "\n\n" +
-      "If you did not register, please ignore this email.\n"
+      "If you did not register, please ignore this email.\n";
 
     const mailOptions = {
       to: user.email,
       from: process.env.GMAIL,
       subject: "Yelp Camp Registration",
-      text: content
-    }
+      text: content,
+    };
 
     await mailhelper.sendMail(mailOptions);
 
-    // save to database    
+    // save to database
     await user.save();
     req.flash(
       "success",
@@ -175,9 +173,9 @@ router.post(
   passport.authenticate("local", {
     successRedirect: "/campgrounds",
     failureRedirect: "/login",
-    failureFlash: true
+    failureFlash: true,
   }),
-  function(req, res) {}
+  function (req, res) {}
 );
 
 //logout route
@@ -218,7 +216,7 @@ router.post("/forgot", async (req, res) => {
         "/reset/" +
         token +
         "\n\n" +
-        "If you did not request this, please ignore this email and your password will remain unchanged.\n"
+        "If you did not request this, please ignore this email and your password will remain unchanged.\n",
     };
 
     await mailhelper.sendMail(mailOptions);
@@ -226,7 +224,7 @@ router.post("/forgot", async (req, res) => {
       "success",
       "An e-mail has been sent to " + user.email + " with further instructions."
     );
-    res.redirect("/login");    
+    res.redirect("/login");
   } catch (error) {
     console.log(error);
     res.redirect("/forgot");
@@ -234,46 +232,41 @@ router.post("/forgot", async (req, res) => {
 });
 
 router.get("/reset/:token", async (req, res) => {
-  let user = await User.findOne(
-    {
-      resetPasswordToken: req.params.token,
-      resetPasswordExpires: { $gt: Date.now() }
-    }
-  );
+  let user = await User.findOne({
+    resetPasswordToken: req.params.token,
+    resetPasswordExpires: { $gt: Date.now() },
+  });
 
-  if(!user){
+  if (!user) {
     req.flash("error", "Password reset token is invalid or has expired.");
     return res.redirect("/forgot");
   }
 
   res.render("reset", { token: req.params.token });
-  
 });
 
 router.post("/reset/:token", async (req, res) => {
   try {
-    let user = await User.findOne(
-      {
-        resetPasswordToken: req.params.token,
-        resetPasswordExpires: { $gt: Date.now() }
-      }
-    );
-  
-    if(!user){
+    let user = await User.findOne({
+      resetPasswordToken: req.params.token,
+      resetPasswordExpires: { $gt: Date.now() },
+    });
+
+    if (!user) {
       req.flash("error", "Password reset token is invalid or has expired.");
       return res.redirect("back");
     }
-  
-    if (req.body.password === req.body.confirm){      
+
+    if (req.body.password === req.body.confirm) {
       user.resetPasswordToken = undefined;
       user.resetPasswordExpires = undefined;
       await user.setPassword(req.body.password);
-      await user.save();      
+      await user.save();
     } else {
       req.flash("error", "Passwords do not match.");
       return res.redirect("back");
-    }   
-  
+    }
+
     var mailOptions = {
       to: user.email,
       from: process.env.GMAIL,
@@ -282,9 +275,9 @@ router.post("/reset/:token", async (req, res) => {
         "Hello,\n\n" +
         "This is a confirmation that the password for your account " +
         user.email +
-        " has just been changed.\n"
+        " has just been changed.\n",
     };
-  
+
     await mailhelper.sendMail(mailOptions);
     req.flash("success", "Success! Your password has been changed.");
     res.redirect("/login");
@@ -292,7 +285,7 @@ router.post("/reset/:token", async (req, res) => {
     console.log(error);
     req.flash("error", "Something is wrong...");
     return res.redirect("back");
-  }  
+  }
 });
 
 module.exports = router;
